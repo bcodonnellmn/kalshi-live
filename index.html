@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Kalshi · Live</title>
+<style>
+  :root {
+    --bg:       #0d0d18;
+    --surface:  #14141f;
+    --surface2: #1c1c2e;
+    --border:   #2a2a42;
+    --green:    #00e87a;
+    --green-dim:#00b85e;
+    --red:      #ff2d55;
+    --yellow:   #ffd60a;
+    --orange:   #ff8c00;
+    --blue:     #3d8bff;
+    --muted:    #6b6b8a;
+    --muted2:   #9898b8;
+    --text:     #e8e8f0;
+    --mono:     'Courier New', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { background: var(--bg); color: var(--text); font-family: var(--mono); min-height: 100vh; }
+
+  /* ── Header ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px 10px;
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-title { font-size: 13px; font-weight: 700; letter-spacing: 2px; color: var(--green); text-transform: uppercase; }
+  .header-time { font-size: 10px; color: var(--muted); }
+
+  /* ── Stats bar ── */
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: var(--surface2); border-bottom: 1px solid var(--border);
+    padding: 10px 12px; gap: 4px;
+  }
+  .stat { text-align: center; }
+  .stat-val { font-size: 16px; font-weight: 700; }
+  .stat-lbl { font-size: 8px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .yellow { color: var(--yellow); }
+  .muted { color: var(--muted); }
+  .blue { color: var(--blue); }
+
+  /* ── Section headers ── */
+  .section-hdr {
+    padding: 10px 16px 6px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-title { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+  /* ── Zone filter pills ── */
+  .zone-pills {
+    display: flex; gap: 5px; padding: 0 16px 8px; flex-wrap: wrap;
+  }
+  .pill {
+    font-size: 9px; padding: 3px 9px; border-radius: 12px;
+    border: 1px solid var(--border); background: none; color: var(--muted);
+    cursor: pointer; letter-spacing: 1px; text-transform: uppercase;
+    -webkit-appearance: none;
+  }
+  .pill.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .pill.midday.active { background: var(--green); border-color: var(--green); color: #000; }
+  .pill.open.active { background: var(--yellow); border-color: var(--yellow); color: #000; }
+  .pill.evening.active { background: var(--orange); border-color: var(--orange); color: #000; }
+
+  /* ── Checkerboard ── */
+  .cb-wrap { overflow-x: auto; padding: 0 16px 4px; }
+  .cb-table { border-collapse: collapse; width: 100%; min-width: 280px; }
+  .cb-table th {
+    font-size: 8px; letter-spacing: 1px; color: var(--muted); text-align: center;
+    padding: 4px 6px; border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  .cb-table th.city-col { text-align: left; width: 110px; }
+  .cb-table td { padding: 3px 4px; text-align: center; vertical-align: middle; }
+  .cb-table td.city-name { text-align: left; font-size: 10px; color: var(--muted2); padding-right: 8px; white-space: nowrap; }
+  .cb-table tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+  .cell {
+    width: 28px; height: 24px; border-radius: 4px; display: inline-flex;
+    align-items: center; justify-content: center; font-size: 8px;
+    font-weight: 700; border: 1px solid transparent; margin: 0 auto;
+  }
+  .cell-win     { background: rgba(0,232,122,0.25); border-color: rgba(0,232,122,0.5); color: var(--green); }
+  .cell-loss    { background: rgba(255,45,85,0.18); border-color: rgba(255,45,85,0.35); color: var(--red); background-image: repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.25) 3px,rgba(0,0,0,0.25) 4px); }
+  .cell-pending { background: rgba(61,139,255,0.15); border-color: rgba(61,139,255,0.3); color: var(--blue); }
+  .cell-none    { background: var(--surface2); border-color: var(--border); color: var(--border); }
+  .cell.dim     { opacity: 0.35; }
+
+  /* Zone color dots on cells */
+  .cell-mid { border-color: rgba(0,232,122,0.6) !important; }
+  .cell-opn { border-color: rgba(255,214,10,0.5) !important; }
+  .cell-evn { border-color: rgba(255,140,0,0.5) !important; }
+
+  /* ── CB stat row ── */
+  .cb-stats {
+    display: flex; gap: 16px; padding: 6px 16px 10px;
+    font-size: 9px; color: var(--muted);
+  }
+  .cb-stat-val { color: var(--text); font-weight: 700; }
+
+  /* ── Transaction cards ── */
+  .tx-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+  .tx-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; position: relative;
+  }
+  .tx-card.midday { border-left: 3px solid var(--green); }
+  .tx-card.open   { border-left: 3px solid var(--yellow); opacity: 0.85; }
+  .tx-card.evening{ border-left: 3px solid var(--orange); opacity: 0.85; }
+  .tx-card.hidden { display: none; }
+
+  .tx-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+  .tx-city { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: 0.5px; }
+  .tx-badges { display: flex; gap: 4px; align-items: center; }
+  .zone-badge {
+    font-size: 8px; padding: 2px 6px; border-radius: 3px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .badge-midday { background: rgba(0,232,122,0.15); color: var(--green); border: 1px solid rgba(0,232,122,0.3); }
+  .badge-open   { background: rgba(255,214,10,0.12); color: var(--yellow); border: 1px solid rgba(255,214,10,0.3); }
+  .badge-evening{ background: rgba(255,140,0,0.12); color: var(--orange); border: 1px solid rgba(255,140,0,0.3); }
+  .settle-badge {
+    font-size: 8px; padding: 2px 6px; border-radius: 3px;
+    background: rgba(61,139,255,0.12); color: var(--blue);
+    border: 1px solid rgba(61,139,255,0.25); letter-spacing: 1px;
+  }
+  .do-not-trade-bar {
+    font-size: 9px; color: var(--orange); letter-spacing: 1px;
+    margin-bottom: 5px; text-transform: uppercase; font-weight: 700;
+  }
+  .tx-meta { font-size: 9px; color: var(--muted); margin-bottom: 8px; }
+
+  .tx-signals { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+  .sig-line {
+    font-size: 10px; padding: 5px 9px; border-radius: 5px;
+    background: rgba(0,232,122,0.07); border: 1px solid rgba(0,232,122,0.2);
+    color: var(--green); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sig-line.adj {
+    background: rgba(61,139,255,0.07); border-color: rgba(61,139,255,0.2);
+    color: var(--blue);
+  }
+
+  .tx-fin {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  .fin-box { background: var(--surface2); border-radius: 6px; padding: 6px 8px; text-align: center; }
+  .fin-lbl { font-size: 7px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+  .fin-val { font-size: 12px; font-weight: 700; }
+
+  /* ── Recently fired banner ── */
+  .recent-banner {
+    font-size: 8px; padding: 2px 8px; border-radius: 10px; display: inline-block;
+    background: rgba(0,232,122,0.12); color: var(--green); border: 1px solid rgba(0,232,122,0.3);
+    letter-spacing: 1px; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  /* ── Empty state ── */
+  .empty { text-align: center; color: var(--muted); font-size: 11px; padding: 24px 16px; }
+
+  /* ── Tablet 2-col ── */
+  @media (min-width: 640px) {
+    .tx-list { display: grid; grid-template-columns: 1fr 1fr; }
+    .stats-bar { padding: 12px 20px; }
+    .stat-val { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Password gate — shown before dashboard -->
+  <div id="gate" style="position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+    <div style="font-size:11px;letter-spacing:3px;color:var(--green);text-transform:uppercase;">⚡ Kalshi Live</div>
+    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Enter PIN</div>
+    <input id="pin-input" type="password" inputmode="numeric" maxlength="4"
+      style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:24px;letter-spacing:8px;text-align:center;padding:12px 20px;width:160px;outline:none;"
+      placeholder="····" autocomplete="off">
+    <div id="pin-err" style="font-size:9px;color:var(--red);letter-spacing:1px;min-height:14px;"></div>
+    <button onclick="checkPin()"
+      style="background:var(--green);color:#000;border:none;border-radius:8px;padding:10px 32px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;">
+      ENTER
+    </button>
+  </div>
+
+<div class="header">
+  <div class="header-title">⚡ Kalshi Live</div>
+  <div class="header-time" id="upd-time">Updated —</div>
+</div>
+
+<div class="stats-bar" id="stats-bar">
+  <div class="stat">
+    <div class="stat-val" id="s-wr">—</div>
+    <div class="stat-lbl">Win Rate</div>
+  </div>
+  <div class="stat">
+    <div class="stat-val" id="s-wl">—</div>
+    <div class="stat-lbl">W / L</div>
+  </div>
+  <div class="stat">
+    <div class="stat-val" id="s-pnl">—</div>
+    <div class="stat-lbl">Net P&L</div>
+  </div>
+  <div class="stat">
+    <div class="stat-val" id="s-bank">—</div>
+    <div class="stat-lbl">Bank</div>
+  </div>
+</div>
+
+<!-- CHECKERBOARD -->
+<div class="section-hdr">
+  <span class="section-title">Signal Checkerboard</span>
+</div>
+<div class="zone-pills" id="cb-pills">
+  <button class="pill active" onclick="setCBZone('all',this)">ALL</button>
+  <button class="pill open" onclick="setCBZone('open',this)">OPEN</button>
+  <button class="pill midday" onclick="setCBZone('midday',this)">MIDDAY</button>
+  <button class="pill evening" onclick="setCBZone('evening',this)">EVENING</button>
+</div>
+<div class="cb-wrap">
+  <table class="cb-table" id="cb-table">
+    <thead><tr id="cb-head"></tr></thead>
+    <tbody id="cb-body"></tbody>
+  </table>
+</div>
+<div class="cb-stats" id="cb-stats"></div>
+
+<!-- LIVE TRANSACTIONS -->
+<div class="section-hdr">
+  <span class="section-title">Live Transactions</span>
+</div>
+<div class="zone-pills" id="tx-pills">
+  <button class="pill active" onclick="setTXZone('all',this)">ALL</button>
+  <button class="pill open" onclick="setTXZone('open',this)">OPEN</button>
+  <button class="pill midday" onclick="setTXZone('midday',this)">MIDDAY</button>
+  <button class="pill evening" onclick="setTXZone('evening',this)">EVENING</button>
+</div>
+<div class="tx-list" id="tx-list"></div>
+
+<script>
+// ── Baked-in data ──────────────────────────────────────────────────────────
+const PEAKS = [{"city": "Chicago", "bracket": "76\u00b0 to 77\u00b0", "adj": "78\u00b0 to 79\u00b0", "price": 21, "adj_price": 23, "edge": 10, "zone": "OPEN", "target": "2026-05-24", "fired_str": "05-23 9:45am", "spent": 99.89, "win_primary": 138.11, "win_adjacent": 117.11, "age_min": 2090, "is_today": false, "is_tomorrow": false, "recently_fired": false}, {"city": "Austin", "bracket": "84\u00b0 to 85\u00b0", "adj": "86\u00b0 to 87\u00b0", "price": 8, "adj_price": 13, "edge": 32, "zone": "OPEN", "target": "2026-05-24", "fired_str": "05-23 9:35am", "spent": 99.92, "win_primary": 525.08, "win_adjacent": 284.08, "age_min": 2100, "is_today": false, "is_tomorrow": false, "recently_fired": false}, {"city": "Boston", "bracket": "55\u00b0 to 56\u00b0", "adj": "53\u00b0 to 54\u00b0", "price": 25, "adj_price": 18, "edge": 10, "zone": "OPEN", "target": "2026-05-24", "fired_str": "05-23 9:40am", "spent": 99.86, "win_primary": 100.14, "win_adjacent": 177.14, "age_min": 2095, "is_today": false, "is_tomorrow": false, "recently_fired": false}, {"city": "San Francisco", "bracket": "66\u00b0 to 67\u00b0", "adj": "68\u00b0 to 69\u00b0", "price": 23, "adj_price": 8, "edge": 23, "zone": "OPEN", "target": "2026-05-24", "fired_str": "05-23 11:00am", "spent": 99.91, "win_primary": 117.09, "win_adjacent": 525.09, "age_min": 2015, "is_today": false, "is_tomorrow": false, "recently_fired": false}, {"city": "Dallas", "bracket": "86\u00b0 to 87\u00b0", "adj": "84\u00b0 to 85\u00b0", "price": 28, "adj_price": 9, "edge": 15, "zone": "EVENING", "target": "2026-05-24", "fired_str": "05-23 9:00pm", "spent": 99.79, "win_primary": 78.21, "win_adjacent": 455.21, "age_min": 1415, "is_today": false, "is_tomorrow": false, "recently_fired": false}, {"city": "Houston", "bracket": "83\u00b0 to 84\u00b0", "adj": "81\u00b0 to 82\u00b0", "price": 28, "adj_price": 8, "edge": 17, "zone": "EVENING", "target": "2026-05-24", "fired_str": "05-23 7:30pm", "spent": 99.84, "win_primary": 78.16, "win_adjacent": 525.16, "age_min": 1505, "is_today": false, "is_tomorrow": false, "recently_fired": false}, {"city": "Chicago", "bracket": "86\u00b0 to 87\u00b0", "adj": "88\u00b0 to 89\u00b0", "price": 18, "adj_price": 7, "edge": 29, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 9:40am", "spent": 99.84, "win_primary": 177.16, "win_adjacent": 614.16, "age_min": 655, "is_today": true, "is_tomorrow": false, "recently_fired": false}, {"city": "Los Angeles", "bracket": "65\u00b0 to 66\u00b0", "adj": "63\u00b0 to 64\u00b0", "price": 20, "adj_price": 6, "edge": 27, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 9:18am", "spent": 99.98, "win_primary": 150.02, "win_adjacent": 733.02, "age_min": 677, "is_today": true, "is_tomorrow": false, "recently_fired": false}, {"city": "Oklahoma City", "bracket": "85\u00b0 to 86\u00b0", "adj": "83\u00b0 to 84\u00b0", "price": 33, "adj_price": 9, "edge": 11, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 11:50am", "spent": 99.78, "win_primary": 51.22, "win_adjacent": 455.22, "age_min": 525, "is_today": true, "is_tomorrow": false, "recently_fired": false}, {"city": "San Francisco", "bracket": "64\u00b0 to 65\u00b0", "adj": "66\u00b0 to 67\u00b0", "price": 31, "adj_price": 11, "edge": 12, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 11:00am", "spent": 99.85, "win_primary": 61.15, "win_adjacent": 354.15, "age_min": 575, "is_today": true, "is_tomorrow": false, "recently_fired": false}];
+const CB_DATA = {"Chicago": {"2026-05-25": {"zone": "OPEN", "outcome": "PENDING", "bracket": "86\u00b0 to 87\u00b0"}, "2026-05-24": {"zone": "OPEN", "outcome": "PENDING", "bracket": "76\u00b0 to 77\u00b0"}}, "Los Angeles": {"2026-05-25": {"zone": "OPEN", "outcome": "PENDING", "bracket": "65\u00b0 to 66\u00b0"}, "2026-05-24": {"zone": "OPEN", "outcome": "LOSS", "bracket": "64\u00b0 to 65\u00b0"}}, "Oklahoma City": {"2026-05-25": {"zone": "OPEN", "outcome": "PENDING", "bracket": "85\u00b0 to 86\u00b0"}, "2026-05-24": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "81\u00b0 to 82\u00b0"}}, "San Francisco": {"2026-05-25": {"zone": "OPEN", "outcome": "PENDING", "bracket": "64\u00b0 to 65\u00b0"}, "2026-05-24": {"zone": "OPEN", "outcome": "PENDING", "bracket": "66\u00b0 to 67\u00b0"}}, "Austin": {"2026-05-24": {"zone": "OPEN", "outcome": "PENDING", "bracket": "84\u00b0 to 85\u00b0"}}, "Boston": {"2026-05-24": {"zone": "OPEN", "outcome": "PENDING", "bracket": "55\u00b0 to 56\u00b0"}}, "Dallas": {"2026-05-24": {"zone": "EVENING", "outcome": "PENDING", "bracket": "86\u00b0 to 87\u00b0"}}, "Houston": {"2026-05-24": {"zone": "EVENING", "outcome": "PENDING", "bracket": "83\u00b0 to 84\u00b0"}}};
+const CB_CITIES = ["Austin", "Boston", "Chicago", "Dallas", "Houston", "Los Angeles", "Oklahoma City", "San Francisco"];
+const CB_DATES = ["2026-05-26", "2026-05-25", "2026-05-24"];
+const STATS = {"wins": 7, "losses": 4, "win_rate": 64, "net_pnl": 967.29, "bank": 1967.29, "updated": "11:55 AM CDT", "today": "2026-05-25", "tomorrow": "2026-05-26", "yesterday": "2026-05-24"};
+
+// ── State ──────────────────────────────────────────────────────────────────
+let cbZone = 'all', txZone = 'all';
+
+// ── Init ───────────────────────────────────────────────────────────────────
+// Rendering triggered by PIN gate (see checkPin())
+// Auto-render only if already authenticated
+document.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('kalshi_auth') === PIN_HASH) {
+    renderStats(); renderCB(); renderTX();
+  }
+});
+
+// ── Stats ──────────────────────────────────────────────────────────────────
+function renderStats() {
+  document.getElementById('upd-time').textContent = 'Updated ' + STATS.updated;
+  const wr = STATS.win_rate;
+  const wrEl = document.getElementById('s-wr');
+  wrEl.textContent = wr != null ? wr + '%' : '—';
+  wrEl.className = 'stat-val ' + (wr >= 75 ? 'green' : wr >= 50 ? 'yellow' : wr != null ? 'red' : 'muted');
+  document.getElementById('s-wl').textContent = STATS.wins + 'W / ' + STATS.losses + 'L';
+  const pnl = STATS.net_pnl;
+  const pnlEl = document.getElementById('s-pnl');
+  pnlEl.textContent = (pnl >= 0 ? '+' : '') + '$' + Math.abs(pnl).toFixed(2);
+  pnlEl.className = 'stat-val ' + (pnl >= 0 ? 'green' : 'red');
+  document.getElementById('s-bank').textContent = '$' + STATS.bank.toFixed(2);
+}
+
+// ── Checkerboard ───────────────────────────────────────────────────────────
+function setCBZone(z, btn) {
+  cbZone = z;
+  document.querySelectorAll('#cb-pills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCB();
+}
+
+function renderCB() {
+  const head = document.getElementById('cb-head');
+  const body = document.getElementById('cb-body');
+  const statsEl = document.getElementById('cb-stats');
+  const dLabels = { [STATS.tomorrow]: 'TMRW', [STATS.today]: 'TODAY', [STATS.yesterday]: 'YDAY' };
+
+  head.innerHTML = '<th class="city-col cb-table">CITY</th>' +
+    CB_DATES.map(d => '<th>' + (dLabels[d] || d.slice(5)) + '</th>').join('');
+
+  let wins = 0, losses = 0, pending = 0;
+  let rows = '';
+  let visibleCities = 0;
+
+  CB_CITIES.forEach(city => {
+    const cityData = CB_DATA[city] || {};
+    // Check if any cell in this city matches the zone filter
+    const hasCells = CB_DATES.some(d => {
+      const cell = cityData[d];
+      if (!cell) return false;
+      return cbZone === 'all' || cell.zone.toLowerCase() === cbZone;
+    });
+    if (!hasCells) return;
+    visibleCities++;
+
+    const cells = CB_DATES.map(d => {
+      const cell = cityData[d];
+      if (!cell) return '<td><div class="cell cell-none">·</div></td>';
+      const matchZone = cbZone === 'all' || cell.zone.toLowerCase() === cbZone;
+      const zoneClass = cell.zone === 'MIDDAY' ? 'cell-mid' : cell.zone === 'OPEN' ? 'cell-opn' : 'cell-evn';
+      let cls = '', lbl = '';
+      if (cell.outcome === 'WIN')     { cls = 'cell-win ' + zoneClass; lbl = '✓'; wins++; }
+      else if (cell.outcome === 'LOSS') { cls = 'cell-loss ' + zoneClass; lbl = '✗'; losses++; }
+      else { cls = 'cell-pending ' + zoneClass; lbl = '⊕'; pending++; }
+      if (!matchZone) cls += ' dim';
+      return '<td><div class="cell ' + cls + '" title="' + city + ' ' + d + ' [' + cell.zone + '] ' + cell.bracket + '">' + lbl + '</div></td>';
+    }).join('');
+    rows += '<tr><td class="city-name">' + city + '</td>' + cells + '</tr>';
+  });
+
+  body.innerHTML = rows || '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:16px;font-size:10px;">No signals for selected zone</td></tr>';
+  const tot = wins + losses;
+  const wr = tot > 0 ? Math.round(wins/tot*100) + '%' : '—';
+  statsEl.innerHTML =
+    '<span><span class="cb-stat-val ' + (wins>losses?'green':'muted') + '">' + wins + 'W / ' + losses + 'L</span> settled</span>' +
+    '<span><span class="cb-stat-val blue">' + pending + '</span> pending</span>' +
+    '<span>Win rate: <span class="cb-stat-val ' + (parseInt(wr)>=75?'green':parseInt(wr)>=50?'yellow':'red') + '">' + wr + '</span></span>';
+}
+
+// ── Transactions ───────────────────────────────────────────────────────────
+function setTXZone(z, btn) {
+  txZone = z;
+  document.querySelectorAll('#tx-pills .pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTX();
+}
+
+function renderTX() {
+  const list = document.getElementById('tx-list');
+  const filtered = txZone === 'all' ? PEAKS : PEAKS.filter(p => p.zone.toLowerCase() === txZone);
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty">No active transactions for selected zone</div>';
+    return;
+  }
+  list.innerHTML = filtered.map(p => {
+    const zclass = p.zone.toLowerCase();
+    const badgeCls = 'badge-' + zclass;
+    const settleLbl = p.is_today ? 'TODAY' : p.target.slice(5);
+    const dnt = p.zone !== 'MIDDAY' ? '<div class="do-not-trade-bar">\u26d4 DO NOT TRADE \u00b7 ' + p.zone + ' ZONE</div>' : '';
+    const recentBadge = p.recently_fired ? ' <span style="font-size:8px;color:var(--green);">\u25cf NEW</span>' : '';
+    const sigPri = '\u25b2 ' + p.bracket + (p.price != null ? ' \u00b7 ' + p.price + '\u00a2' : '');
+    const sigAdj = p.adj ? '<div class="sig-line adj">\u25b2 ' + p.adj + (p.adj_price != null ? ' \u00b7 ' + p.adj_price + '\u00a2' : '') + '</div>' : '';
+    const winAdj = p.win_adjacent != null ? '<div class="fin-box"><div class="fin-lbl">ADJ WIN</div><div class="fin-val blue">+$' + p.win_adjacent.toFixed(2) + '</div></div>' : '<div class="fin-box"><div class="fin-lbl">ADJ WIN</div><div class="fin-val muted">\u2014</div></div>';
+    return '<div class="tx-card ' + zclass + '">' +
+      '<div class="tx-top">' +
+        '<div class="tx-city">' + p.city + recentBadge + '</div>' +
+        '<div class="tx-badges">' +
+          '<span class="zone-badge ' + badgeCls + '">' + p.zone + '</span>' +
+          '<span class="settle-badge">\u2192' + settleLbl + '</span>' +
+        '</div>' +
+      '</div>' +
+      dnt +
+      '<div class="tx-meta">TMRW \u00b7 Locked ' + p.fired_str + (p.edge != null ? ' \u00b7 +' + p.edge + '% edge' : '') + '</div>' +
+      '<div class="tx-signals">' +
+        '<div class="sig-line">' + sigPri + '</div>' +
+        sigAdj +
+      '</div>' +
+      '<div class="tx-fin">' +
+        '<div class="fin-box"><div class="fin-lbl">SPENT</div><div class="fin-val red">-$' + p.spent.toFixed(2) + '</div></div>' +
+        '<div class="fin-box"><div class="fin-lbl">WIN (pri)</div><div class="fin-val green">+$' + p.win_primary.toFixed(2) + '</div></div>' +
+        winAdj +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+  // ── PIN gate ───────────────────────────────────────────────────────────────
+  const PIN_HASH = 'wh62';
+  function hashPin(pin) {
+    let h = 0;
+    for (let i = 0; i < pin.length; i++) {
+      h = Math.imul(31, h) + pin.charCodeAt(i) | 0;
+    }
+    return Math.abs(h).toString(36);
+  }
+  function checkPin() {
+    const val = document.getElementById('pin-input').value;
+    if (hashPin(val) === PIN_HASH) {
+      document.getElementById('gate').style.display = 'none';
+      sessionStorage.setItem('kalshi_auth', PIN_HASH);
+      renderStats(); renderCB(); renderTX();
+    } else {
+      const err = document.getElementById('pin-err');
+      err.textContent = 'Incorrect PIN';
+      document.getElementById('pin-input').value = '';
+      setTimeout(() => err.textContent = '', 2000);
+    }
+  }
+  document.getElementById('pin-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPin();
+  });
+  // Auto-unlock if already authenticated this session
+  if (sessionStorage.getItem('kalshi_auth') === PIN_HASH) {
+    document.getElementById('gate').style.display = 'none';
+  } else {
+    // Don't render data until PIN is entered
+    document.removeEventListener('DOMContentLoaded', null);
+  }
+
+</script>
+</body>
+</html>
