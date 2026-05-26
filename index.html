@@ -259,14 +259,75 @@
 </div>
 <div class="tx-list" id="tx-list"></div>
 
+<!-- SECTION 3: PER-CITY WIN RATES (10-day) -->
+<div class="section-hdr" style="cursor:pointer;user-select:none;" onclick="toggleSection3()">
+  <span class="section-title">Per-City Win Rates <span id="s3-chevron" style="font-size:10px;margin-left:4px;">▶</span></span>
+  <span id="s3-summary" style="font-size:9px;font-family:'Space Mono',monospace;color:var(--muted);margin-left:8px;"></span>
+</div>
+<div id="section3-body" style="display:none;">
+  <div class="zone-pills" id="s3-pills">
+    <button class="pill active" onclick="setS3Zone('all',this)">ALL</button>
+    <button class="pill open" onclick="setS3Zone('open',this)">OPEN</button>
+    <button class="pill midday" onclick="setS3Zone('midday',this)">MIDDAY</button>
+    <button class="pill evening" onclick="setS3Zone('evening',this)">EVENING</button>
+  </div>
+  <div style="padding:0 16px 8px;font-size:8px;color:var(--muted);font-family:'Space Mono',monospace;">T-T signals counted under OPEN · 10-day window</div>
+  <div id="s3-table-wrap" style="padding:0 16px 16px;overflow-x:auto;">
+    <table id="s3-table" style="width:100%;border-collapse:collapse;font-size:9px;font-family:'Space Mono',monospace;min-width:260px;">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border);">
+          <th style="text-align:left;padding:4px 6px;font-size:8px;color:var(--muted);letter-spacing:1px;">CITY</th>
+          <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">10D WR</th>
+          <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">W/L/P</th>
+          <th style="text-align:right;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">NET P&amp;L</th>
+          <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">#</th>
+        </tr>
+      </thead>
+      <tbody id="s3-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 4: 3-DAY TRANSACTION LOG -->
+<div class="section-hdr" style="cursor:pointer;user-select:none;" onclick="toggleSection4()">
+  <span class="section-title">3-Day Transaction Log <span id="s4-chevron" style="font-size:10px;margin-left:4px;">▶</span></span>
+  <span id="s4-summary" style="font-size:9px;font-family:'Space Mono',monospace;color:var(--muted);margin-left:8px;"></span>
+</div>
+<div id="section4-body" style="display:none;">
+  <div class="zone-pills" id="s4-pills">
+    <button class="pill active" onclick="setS4Zone('all',this)">ALL</button>
+    <button class="pill open" onclick="setS4Zone('open',this)">OPEN</button>
+    <button class="pill midday" onclick="setS4Zone('midday',this)">MIDDAY</button>
+    <button class="pill evening" onclick="setS4Zone('evening',this)">EVENING</button>
+  </div>
+  <div style="padding:0 16px 4px;font-size:8px;color:var(--muted);font-family:'Space Mono',monospace;">T-T counted under OPEN · TMRW=pending TMRW signal · T-T=today-signal→today · Y-T=yesterday-signal→today · YDAY=settled yday</div>
+  <div style="padding:0 16px 4px;" id="s4-stats" style="font-size:9px;font-family:'Space Mono',monospace;"></div>
+  <div style="padding:0 16px 16px;overflow-x:auto;">
+    <table id="s4-table" style="width:100%;border-collapse:collapse;font-size:9px;font-family:'Space Mono',monospace;min-width:300px;">
+      <thead>
+        <tr style="border-bottom:1px solid var(--border);">
+          <th style="text-align:left;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">CITY</th>
+          <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">SIG</th>
+          <th style="text-align:left;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">BRACKET</th>
+          <th style="text-align:right;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">GROSS</th>
+          <th style="text-align:right;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">NET</th>
+        </tr>
+      </thead>
+      <tbody id="s4-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
 <script>
 // ── Baked-in data ──────────────────────────────────────────────────────────
-const PEAKS = [{"city": "San Francisco", "bracket": "62\u00b0 to 63\u00b0", "adj": "60\u00b0 to 61\u00b0", "price": 29, "adj_price": 7, "edge": 17, "zone": "OPEN", "target": "2026-05-26", "fired_str": "05-26 8:37am", "spent": 99.86, "win_primary": 72.14, "win_adjacent": 614.14, "age_min": 343, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "today", "outcome": "PENDING", "tx_group": 1}, {"city": "Atlanta", "bracket": "82\u00b0 to 83\u00b0", "adj": "80\u00b0 to 81\u00b0", "price": 28, "adj_price": 11, "edge": 14, "zone": "OPEN", "target": "2026-05-27", "fired_str": "05-26 10:54am", "spent": 99.78, "win_primary": 78.22, "win_adjacent": 354.22, "age_min": 207, "is_today": false, "is_tomorrow": true, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 2}, {"city": "Austin", "bracket": "81\u00b0 to 82\u00b0", "adj": "83\u00b0 to 84\u00b0", "price": 6, "adj_price": 25, "edge": 22, "zone": "OPEN", "target": "2026-05-27", "fired_str": "05-26 10:50am", "spent": 99.98, "win_primary": 733.02, "win_adjacent": 100.02, "age_min": 210, "is_today": false, "is_tomorrow": true, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 2}, {"city": "Boston", "bracket": "83\u00b0 to 84\u00b0", "adj": "85\u00b0 to 86\u00b0", "price": 12, "adj_price": 26, "edge": 15, "zone": "OPEN", "target": "2026-05-27", "fired_str": "05-26 10:30am", "spent": 99.84, "win_primary": 316.16, "win_adjacent": 92.16, "age_min": 230, "is_today": false, "is_tomorrow": true, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 2}, {"city": "Dallas", "bracket": "81\u00b0 to 82\u00b0", "adj": "79\u00b0 to 80\u00b0", "price": 22, "adj_price": 17, "edge": 14, "zone": "OPEN", "target": "2026-05-27", "fired_str": "05-26 10:20am", "spent": 99.92, "win_primary": 127.08, "win_adjacent": 194.08, "age_min": 240, "is_today": false, "is_tomorrow": true, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 2}, {"city": "Los Angeles", "bracket": "64\u00b0 to 65\u00b0", "adj": "62\u00b0 to 63\u00b0", "price": 19, "adj_price": 6, "edge": 28, "zone": "OPEN", "target": "2026-05-27", "fired_str": "05-26 9:20am", "spent": 99.95, "win_primary": 163.05, "win_adjacent": 733.05, "age_min": 300, "is_today": false, "is_tomorrow": true, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 2}, {"city": "Boston", "bracket": "80\u00b0 to 81\u00b0", "adj": "82\u00b0 to 83\u00b0", "price": 18, "adj_price": 24, "edge": 11, "zone": "OPEN", "target": "2026-05-26", "fired_str": "05-25 10:30am", "spent": 99.78, "win_primary": 177.22, "win_adjacent": 108.22, "age_min": 1670, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 3}, {"city": "Chicago", "bracket": "87\u00b0 to 88\u00b0", "adj": "89\u00b0 to 90\u00b0", "price": 25, "adj_price": 6, "edge": 23, "zone": "OPEN", "target": "2026-05-26", "fired_str": "05-25 10:55am", "spent": 99.98, "win_primary": 100.02, "win_adjacent": 733.02, "age_min": 1645, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 3}, {"city": "Los Angeles", "bracket": "64\u00b0 to 65\u00b0", "adj": "62\u00b0 to 63\u00b0", "price": 14, "adj_price": 6, "edge": 33, "zone": "OPEN", "target": "2026-05-26", "fired_str": "05-25 9:40am", "spent": 99.96, "win_primary": 257.04, "win_adjacent": 733.04, "age_min": 1720, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 3}, {"city": "New Orleans", "bracket": "83\u00b0 to 84\u00b0", "adj": "85\u00b0 to 86\u00b0", "price": 27, "adj_price": 8, "edge": 18, "zone": "EVENING", "target": "2026-05-26", "fired_str": "05-25 4:35pm", "spent": 99.95, "win_primary": 85.05, "win_adjacent": 525.05, "age_min": 1305, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "WIN", "tx_group": 3}, {"city": "San Antonio", "bracket": "87\u00b0 to 88\u00b0", "adj": "89\u00b0 to 90\u00b0", "price": 28, "adj_price": 9, "edge": 16, "zone": "MIDDAY", "target": "2026-05-26", "fired_str": "05-25 2:35pm", "spent": 99.79, "win_primary": 78.21, "win_adjacent": 455.21, "age_min": 1425, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 3}, {"city": "Washington DC", "bracket": "81\u00b0 to 82\u00b0", "adj": "79\u00b0 to 80\u00b0", "price": 6, "adj_price": 12, "edge": 36, "zone": "OPEN", "target": "2026-05-26", "fired_str": "05-25 11:20am", "spent": 99.9, "win_primary": 733.1, "win_adjacent": 316.1, "age_min": 1620, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 3}, {"city": "Chicago", "bracket": "86\u00b0 to 87\u00b0", "adj": "88\u00b0 to 89\u00b0", "price": 18, "adj_price": 7, "edge": 29, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 9:40am", "spent": 99.84, "win_primary": 177.16, "win_adjacent": 614.16, "age_min": 3160, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}, {"city": "Los Angeles", "bracket": "65\u00b0 to 66\u00b0", "adj": "63\u00b0 to 64\u00b0", "price": 8, "adj_price": 6, "edge": 39, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 9:18am", "spent": 99.98, "win_primary": 525.02, "win_adjacent": 733.02, "age_min": 3182, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}, {"city": "Minneapolis", "bracket": "87\u00b0 to 88\u00b0", "adj": "89\u00b0 to 90\u00b0", "price": 35, "adj_price": 8, "edge": 10, "zone": "EVENING", "target": "2026-05-25", "fired_str": "05-24 4:45pm", "spent": 99.7, "win_primary": 42.3, "win_adjacent": 525.3, "age_min": 2736, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}, {"city": "New Orleans", "bracket": "80\u00b0 to 81\u00b0", "adj": "82\u00b0 to 83\u00b0", "price": 9, "adj_price": 6, "edge": 38, "zone": "MIDDAY", "target": "2026-05-25", "fired_str": "05-24 2:10pm", "spent": 99.93, "win_primary": 455.07, "win_adjacent": 733.07, "age_min": 2890, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}, {"city": "New York", "bracket": "72\u00b0 to 73\u00b0", "adj": "74\u00b0 to 75\u00b0", "price": 24, "adj_price": 9, "edge": 20, "zone": "EVENING", "target": "2026-05-25", "fired_str": "05-24 4:00pm", "spent": 99.87, "win_primary": 108.13, "win_adjacent": 455.13, "age_min": 2781, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "WIN", "tx_group": 4}, {"city": "Oklahoma City", "bracket": "85\u00b0 to 86\u00b0", "adj": "83\u00b0 to 84\u00b0", "price": 33, "adj_price": 9, "edge": 11, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 11:50am", "spent": 99.78, "win_primary": 51.22, "win_adjacent": 455.22, "age_min": 3030, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}, {"city": "San Francisco", "bracket": "64\u00b0 to 65\u00b0", "adj": "66\u00b0 to 67\u00b0", "price": 31, "adj_price": 8, "edge": 15, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 11:00am", "spent": 99.91, "win_primary": 61.09, "win_adjacent": 525.09, "age_min": 3080, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "WIN", "tx_group": 4}, {"city": "Washington DC", "bracket": "78\u00b0 to 79\u00b0", "adj": "76\u00b0 to 77\u00b0", "price": 11, "adj_price": 25, "edge": 18, "zone": "EVENING", "target": "2026-05-25", "fired_str": "05-24 9:45pm", "spent": 99.94, "win_primary": 354.06, "win_adjacent": 100.06, "age_min": 2435, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}];
+const PEAKS = [{"city": "San Francisco", "bracket": "62\u00b0 to 63\u00b0", "adj": "60\u00b0 to 61\u00b0", "price": 29, "adj_price": 7, "edge": 17, "zone": "OPEN", "target": "2026-05-26", "fired_str": "05-26 8:37am", "spent": 99.86, "win_primary": 72.14, "win_adjacent": 614.14, "age_min": 348, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "today", "outcome": "PENDING", "tx_group": 1}, {"city": "Atlanta", "bracket": "82\u00b0 to 83\u00b0", "adj": "80\u00b0 to 81\u00b0", "price": 28, "adj_price": 11, "edge": 14, "zone": "OPEN", "target": "2026-05-27", "fired_str": "05-26 10:54am", "spent": 99.78, "win_primary": 78.22, "win_adjacent": 354.22, "age_min": 212, "is_today": false, "is_tomorrow": true, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 2}, {"city": "Austin", "bracket": "81\u00b0 to 82\u00b0", "adj": "83\u00b0 to 84\u00b0", "price": 6, "adj_price": 25, "edge": 22, "zone": "OPEN", "target": "2026-05-27", "fired_str": "05-26 10:50am", "spent": 99.98, "win_primary": 733.02, "win_adjacent": 100.02, "age_min": 215, "is_today": false, "is_tomorrow": true, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 2}, {"city": "Boston", "bracket": "83\u00b0 to 84\u00b0", "adj": "85\u00b0 to 86\u00b0", "price": 12, "adj_price": 23, "edge": 18, "zone": "OPEN", "target": "2026-05-27", "fired_str": "05-26 10:30am", "spent": 99.83, "win_primary": 316.17, "win_adjacent": 117.17, "age_min": 235, "is_today": false, "is_tomorrow": true, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 2}, {"city": "Dallas", "bracket": "81\u00b0 to 82\u00b0", "adj": "79\u00b0 to 80\u00b0", "price": 22, "adj_price": 17, "edge": 14, "zone": "OPEN", "target": "2026-05-27", "fired_str": "05-26 10:20am", "spent": 99.92, "win_primary": 127.08, "win_adjacent": 194.08, "age_min": 245, "is_today": false, "is_tomorrow": true, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 2}, {"city": "Los Angeles", "bracket": "64\u00b0 to 65\u00b0", "adj": "62\u00b0 to 63\u00b0", "price": 19, "adj_price": 6, "edge": 28, "zone": "OPEN", "target": "2026-05-27", "fired_str": "05-26 9:20am", "spent": 99.95, "win_primary": 163.05, "win_adjacent": 733.05, "age_min": 305, "is_today": false, "is_tomorrow": true, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 2}, {"city": "Boston", "bracket": "80\u00b0 to 81\u00b0", "adj": "82\u00b0 to 83\u00b0", "price": 18, "adj_price": 24, "edge": 11, "zone": "OPEN", "target": "2026-05-26", "fired_str": "05-25 10:30am", "spent": 99.78, "win_primary": 177.22, "win_adjacent": 108.22, "age_min": 1675, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 3}, {"city": "Chicago", "bracket": "87\u00b0 to 88\u00b0", "adj": "89\u00b0 to 90\u00b0", "price": 25, "adj_price": 6, "edge": 23, "zone": "OPEN", "target": "2026-05-26", "fired_str": "05-25 10:55am", "spent": 99.98, "win_primary": 100.02, "win_adjacent": 733.02, "age_min": 1650, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 3}, {"city": "Los Angeles", "bracket": "64\u00b0 to 65\u00b0", "adj": "62\u00b0 to 63\u00b0", "price": 14, "adj_price": 6, "edge": 33, "zone": "OPEN", "target": "2026-05-26", "fired_str": "05-25 9:40am", "spent": 99.96, "win_primary": 257.04, "win_adjacent": 733.04, "age_min": 1725, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 3}, {"city": "New Orleans", "bracket": "83\u00b0 to 84\u00b0", "adj": "85\u00b0 to 86\u00b0", "price": 27, "adj_price": 8, "edge": 18, "zone": "EVENING", "target": "2026-05-26", "fired_str": "05-25 4:35pm", "spent": 99.95, "win_primary": 85.05, "win_adjacent": 525.05, "age_min": 1310, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "WIN", "tx_group": 3}, {"city": "San Antonio", "bracket": "87\u00b0 to 88\u00b0", "adj": "89\u00b0 to 90\u00b0", "price": 28, "adj_price": 9, "edge": 16, "zone": "MIDDAY", "target": "2026-05-26", "fired_str": "05-25 2:35pm", "spent": 99.79, "win_primary": 78.21, "win_adjacent": 455.21, "age_min": 1430, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "tx_group": 3}, {"city": "Washington DC", "bracket": "81\u00b0 to 82\u00b0", "adj": "79\u00b0 to 80\u00b0", "price": 6, "adj_price": 12, "edge": 36, "zone": "OPEN", "target": "2026-05-26", "fired_str": "05-25 11:20am", "spent": 99.9, "win_primary": 733.1, "win_adjacent": 316.1, "age_min": 1625, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 3}, {"city": "Chicago", "bracket": "86\u00b0 to 87\u00b0", "adj": "88\u00b0 to 89\u00b0", "price": 18, "adj_price": 7, "edge": 29, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 9:40am", "spent": 99.84, "win_primary": 177.16, "win_adjacent": 614.16, "age_min": 3165, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}, {"city": "Los Angeles", "bracket": "65\u00b0 to 66\u00b0", "adj": "63\u00b0 to 64\u00b0", "price": 8, "adj_price": 6, "edge": 39, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 9:18am", "spent": 99.98, "win_primary": 525.02, "win_adjacent": 733.02, "age_min": 3187, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}, {"city": "Minneapolis", "bracket": "87\u00b0 to 88\u00b0", "adj": "89\u00b0 to 90\u00b0", "price": 35, "adj_price": 8, "edge": 10, "zone": "EVENING", "target": "2026-05-25", "fired_str": "05-24 4:45pm", "spent": 99.7, "win_primary": 42.3, "win_adjacent": 525.3, "age_min": 2741, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}, {"city": "New Orleans", "bracket": "80\u00b0 to 81\u00b0", "adj": "82\u00b0 to 83\u00b0", "price": 9, "adj_price": 6, "edge": 38, "zone": "MIDDAY", "target": "2026-05-25", "fired_str": "05-24 2:10pm", "spent": 99.93, "win_primary": 455.07, "win_adjacent": 733.07, "age_min": 2895, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}, {"city": "New York", "bracket": "72\u00b0 to 73\u00b0", "adj": "74\u00b0 to 75\u00b0", "price": 24, "adj_price": 9, "edge": 20, "zone": "EVENING", "target": "2026-05-25", "fired_str": "05-24 4:00pm", "spent": 99.87, "win_primary": 108.13, "win_adjacent": 455.13, "age_min": 2786, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "WIN", "tx_group": 4}, {"city": "Oklahoma City", "bracket": "85\u00b0 to 86\u00b0", "adj": "83\u00b0 to 84\u00b0", "price": 33, "adj_price": 9, "edge": 11, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 11:50am", "spent": 99.78, "win_primary": 51.22, "win_adjacent": 455.22, "age_min": 3035, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}, {"city": "San Francisco", "bracket": "64\u00b0 to 65\u00b0", "adj": "66\u00b0 to 67\u00b0", "price": 31, "adj_price": 8, "edge": 15, "zone": "OPEN", "target": "2026-05-25", "fired_str": "05-24 11:00am", "spent": 99.91, "win_primary": 61.09, "win_adjacent": 525.09, "age_min": 3085, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "WIN", "tx_group": 4}, {"city": "Washington DC", "bracket": "78\u00b0 to 79\u00b0", "adj": "76\u00b0 to 77\u00b0", "price": 11, "adj_price": 25, "edge": 18, "zone": "EVENING", "target": "2026-05-25", "fired_str": "05-24 9:45pm", "spent": 99.94, "win_primary": 354.06, "win_adjacent": 100.06, "age_min": 2440, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "tx_group": 4}];
 const CB_DATA = {"San Francisco": {"2026-05-26": {"zone": "OPEN", "outcome": "PENDING", "bracket": "62\u00b0 to 63\u00b0"}, "2026-05-25": {"zone": "OPEN", "outcome": "WIN", "bracket": "64\u00b0 to 65\u00b0"}}, "Los Angeles": {"2026-05-27": {"zone": "OPEN", "outcome": "PENDING", "bracket": "64\u00b0 to 65\u00b0"}, "2026-05-26": {"zone": "OPEN", "outcome": "LOSS", "bracket": "64\u00b0 to 65\u00b0"}, "2026-05-25": {"zone": "OPEN", "outcome": "LOSS", "bracket": "65\u00b0 to 66\u00b0"}}, "Austin": {"2026-05-27": {"zone": "OPEN", "outcome": "PENDING", "bracket": "81\u00b0 to 82\u00b0"}}, "Atlanta": {"2026-05-27": {"zone": "OPEN", "outcome": "PENDING", "bracket": "82\u00b0 to 83\u00b0"}}, "Boston": {"2026-05-27": {"zone": "OPEN", "outcome": "PENDING", "bracket": "83\u00b0 to 84\u00b0"}, "2026-05-26": {"zone": "OPEN", "outcome": "PENDING", "bracket": "80\u00b0 to 81\u00b0"}}, "Dallas": {"2026-05-27": {"zone": "OPEN", "outcome": "PENDING", "bracket": "81\u00b0 to 82\u00b0"}}, "Chicago": {"2026-05-26": {"zone": "OPEN", "outcome": "LOSS", "bracket": "87\u00b0 to 88\u00b0"}, "2026-05-25": {"zone": "OPEN", "outcome": "LOSS", "bracket": "86\u00b0 to 87\u00b0"}}, "Washington DC": {"2026-05-26": {"zone": "OPEN", "outcome": "LOSS", "bracket": "81\u00b0 to 82\u00b0"}, "2026-05-25": {"zone": "EVENING", "outcome": "LOSS", "bracket": "78\u00b0 to 79\u00b0"}}, "San Antonio": {"2026-05-26": {"zone": "MIDDAY", "outcome": "PENDING", "bracket": "87\u00b0 to 88\u00b0"}}, "New Orleans": {"2026-05-26": {"zone": "EVENING", "outcome": "WIN", "bracket": "83\u00b0 to 84\u00b0"}, "2026-05-25": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "80\u00b0 to 81\u00b0"}}, "New York": {"2026-05-25": {"zone": "EVENING", "outcome": "WIN", "bracket": "72\u00b0 to 73\u00b0"}}, "Minneapolis": {"2026-05-25": {"zone": "EVENING", "outcome": "LOSS", "bracket": "87\u00b0 to 88\u00b0"}}, "Oklahoma City": {"2026-05-25": {"zone": "OPEN", "outcome": "LOSS", "bracket": "85\u00b0 to 86\u00b0"}}};
 const CB_CITIES = ["Atlanta", "Austin", "Boston", "Chicago", "Dallas", "Los Angeles", "Minneapolis", "New Orleans", "New York", "Oklahoma City", "San Antonio", "San Francisco", "Washington DC"];
 const CB_DATES = ["2026-05-27", "2026-05-26", "2026-05-25"];
 const CB4 = {"tmrw": {"Los Angeles": {"zone": "OPEN", "outcome": "PENDING", "bracket": "64\u00b0 to 65\u00b0"}, "Austin": {"zone": "OPEN", "outcome": "PENDING", "bracket": "81\u00b0 to 82\u00b0"}, "Atlanta": {"zone": "OPEN", "outcome": "PENDING", "bracket": "82\u00b0 to 83\u00b0"}, "Boston": {"zone": "OPEN", "outcome": "PENDING", "bracket": "83\u00b0 to 84\u00b0"}, "Dallas": {"zone": "OPEN", "outcome": "PENDING", "bracket": "81\u00b0 to 82\u00b0"}}, "tt": {"San Francisco": {"zone": "OPEN", "outcome": "PENDING", "bracket": "62\u00b0 to 63\u00b0"}}, "yt": {"Chicago": {"zone": "OPEN", "outcome": "LOSS", "bracket": "87\u00b0 to 88\u00b0"}, "Los Angeles": {"zone": "OPEN", "outcome": "LOSS", "bracket": "64\u00b0 to 65\u00b0"}, "Boston": {"zone": "OPEN", "outcome": "PENDING", "bracket": "80\u00b0 to 81\u00b0"}, "Washington DC": {"zone": "OPEN", "outcome": "LOSS", "bracket": "81\u00b0 to 82\u00b0"}, "San Antonio": {"zone": "MIDDAY", "outcome": "PENDING", "bracket": "87\u00b0 to 88\u00b0"}, "New Orleans": {"zone": "EVENING", "outcome": "WIN", "bracket": "83\u00b0 to 84\u00b0"}}, "yday": {"New York": {"zone": "EVENING", "outcome": "WIN", "bracket": "72\u00b0 to 73\u00b0"}, "Chicago": {"zone": "OPEN", "outcome": "LOSS", "bracket": "86\u00b0 to 87\u00b0"}, "Los Angeles": {"zone": "OPEN", "outcome": "LOSS", "bracket": "65\u00b0 to 66\u00b0"}, "Minneapolis": {"zone": "EVENING", "outcome": "LOSS", "bracket": "87\u00b0 to 88\u00b0"}, "Washington DC": {"zone": "EVENING", "outcome": "LOSS", "bracket": "78\u00b0 to 79\u00b0"}, "Oklahoma City": {"zone": "OPEN", "outcome": "LOSS", "bracket": "85\u00b0 to 86\u00b0"}, "San Francisco": {"zone": "OPEN", "outcome": "WIN", "bracket": "64\u00b0 to 65\u00b0"}, "New Orleans": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "80\u00b0 to 81\u00b0"}}, "cities": ["Atlanta", "Austin", "Boston", "Chicago", "Dallas", "Los Angeles", "Minneapolis", "New Orleans", "New York", "Oklahoma City", "San Antonio", "San Francisco", "Washington DC"]};
-const STATS = {"wins": 7, "losses": 5, "win_rate": 58, "net_pnl": 867.36, "bank": 1867.36, "updated": "2:20 PM CDT", "today": "2026-05-26", "tomorrow": "2026-05-27", "yesterday": "2026-05-25"};
+const CITY_STATS = __CITY_STATS_JSON__;
+const THREE_DAY_TX = __THREE_DAY_TX_JSON__;
+const STATS = {"wins": 7, "losses": 5, "win_rate": 58, "net_pnl": 867.36, "bank": 1867.36, "updated": "2:25 PM CDT", "today": "2026-05-26", "tomorrow": "2026-05-27", "yesterday": "2026-05-25"};
 const ALL_SETTLED = [{"zone": "MIDDAY", "outcome": "WIN", "net": 455.07}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.82}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.89}, {"zone": "MIDDAY", "outcome": "WIN", "net": 455.13}, {"zone": "MIDDAY", "outcome": "WIN", "net": 108.1}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.86}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.98}, {"zone": "MIDDAY", "outcome": "WIN", "net": 127.06}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.89}, {"zone": "OPEN", "outcome": "WIN", "net": 194.04}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.78}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.78}, {"zone": "OPEN", "outcome": "WIN", "net": 78.21}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.92}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.98}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.98}, {"zone": "MIDDAY", "outcome": "WIN", "net": 51.17}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.95}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.92}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.98}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.86}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.92}, {"zone": "MIDDAY", "outcome": "WIN", "net": 85.07}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.89}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.74}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.91}, {"zone": "EVENING", "outcome": "WIN", "net": 525.06}, {"zone": "EVENING", "outcome": "WIN", "net": 51.19}, {"zone": "MIDDAY", "outcome": "WIN", "net": 85.07}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.86}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.89}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.92}, {"zone": "OPEN", "outcome": "WIN", "net": 100.14}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.79}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.84}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.92}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.91}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.89}, {"zone": "EVENING", "outcome": "WIN", "net": 108.13}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.84}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.98}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.7}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.94}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.78}, {"zone": "OPEN", "outcome": "WIN", "net": 61.09}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.93}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.98}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.96}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9}, {"zone": "EVENING", "outcome": "WIN", "net": 85.05}];
 
 // ── State ──────────────────────────────────────────────────────────────────
@@ -277,7 +338,7 @@ let cbZone = 'all', txZone = 'all';
 // Auto-render only if already authenticated
 document.addEventListener('DOMContentLoaded', () => {
   if (localStorage.getItem('kalshi_auth') === PIN_HASH) {
-    renderStats(); renderCB(); renderTX();
+    renderStats(); renderCB(); renderTX(); renderS3(); renderS4();
   }
 
   // ── Auto-refresh every 6 minutes with cache-buster ──────────────────────
@@ -442,6 +503,10 @@ function renderTX() {
       : '<div class="fin-box"><div class="fin-lbl">ADJ WIN</div><div class="fin-val muted">—</div></div>';
     const srcLabel = p.tx_source === 'today' ? 'TODAY' : 'TMRW';
     const metaLine = srcLabel + ' · Locked ' + p.fired_str + (p.edge != null ? ' · +' + p.edge + '% edge' : '');
+    // Top Kalshi market bracket line
+    const topMktLine = p.top_mkt
+      ? '<div class="tx-meta" style="color:var(--muted2);margin-top:2px;">► Mkt: <span style="color:var(--text);">' + p.top_mkt + '</span>' + (p.top_mkt_pct != null ? ' · ' + p.top_mkt_pct + '¢' : '') + (p.intraday_high != null && (p.outcome === 'WIN' || p.outcome === 'LOSS') ? ' · Actual: <span style="color:var(--yellow);">' + p.intraday_high + '°F</span>' : '') + '</div>'
+      : '';
 
     html += '<div class="tx-card ' + outCls + '">' +
       '<div class="tx-top">' +
@@ -453,6 +518,7 @@ function renderTX() {
       '</div>' +
       dnt +
       settledBar +
+      topMktLine +
       '<div class="tx-meta">' + metaLine + '</div>' +
       '<div class="tx-signals">' +
         '<div class="sig-line">' + sigPri + '</div>' +
@@ -483,7 +549,7 @@ function renderTX() {
     if (hashPin(val) === PIN_HASH) {
       document.getElementById('gate').style.display = 'none';
       localStorage.setItem('kalshi_auth', PIN_HASH);
-      renderStats(); renderCB(); renderTX();
+      renderStats(); renderCB(); renderTX(); renderS3(); renderS4();
     } else {
       const err = document.getElementById('pin-err');
       err.textContent = 'Incorrect PIN';
@@ -502,6 +568,182 @@ function renderTX() {
     document.removeEventListener('DOMContentLoaded', null);
   }
 
+
+// ── Section 3: Per-city win rates (10-day) ────────────────────────────────
+let s3Zone = 'all';
+function toggleSection3() {
+  const body = document.getElementById('section3-body');
+  const chev = document.getElementById('s3-chevron');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  chev.textContent = open ? '▶' : '▼';
+  if (!open) renderS3();
+}
+function setS3Zone(z, btn) {
+  s3Zone = z;
+  document.querySelectorAll('#s3-pills .pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderS3();
+}
+function renderS3() {
+  const tbody = document.getElementById('s3-tbody');
+  const summary = document.getElementById('s3-summary');
+  if (!tbody) return;
+
+  // T-T signals (tx_source=today) count as OPEN for zone filtering
+  function peakZone(p) {
+    if (p.tx_source === 'today' && (p.zone === 'OVERNIGHT' || !p.zone)) return 'open';
+    return (p.zone || '').toLowerCase();
+  }
+
+  // Filter settled peaks to 10-day window
+  const now = Date.now();
+  const cut10 = new Date(now - 10*24*3600*1000).toISOString().slice(0,10);
+  const settled = PEAKS.filter(p => {
+    if (p.outcome !== 'WIN' && p.outcome !== 'LOSS') return false;
+    if ((p.target || '') < cut10) return false;
+    if (s3Zone !== 'all' && peakZone(p) !== s3Zone) return false;
+    return true;
+  });
+
+  // Pending peaks
+  const pending = PEAKS.filter(p => p.outcome === 'PENDING' || p.outcome === 'pending');
+
+  // Aggregate by city
+  const stats = {};
+  settled.forEach(p => {
+    if (!stats[p.city]) stats[p.city] = {w:0,l:0,net:0,n:0};
+    const s = stats[p.city];
+    s.n++;
+    if (p.outcome === 'WIN') { s.w++; s.net += (p.win_primary || 0); }
+    else { s.l++; s.net -= (p.spent || 0); }
+    s.net = Math.round(s.net * 100) / 100;
+  });
+
+  // Add pending count
+  const pendMap = {};
+  pending.forEach(p => { pendMap[p.city] = (pendMap[p.city] || 0) + 1; });
+
+  const cities = [...new Set([...Object.keys(stats), ...Object.keys(pendMap)])].sort();
+  if (!cities.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:12px;">No data for selected zone</td></tr>';
+    summary.textContent = '';
+    return;
+  }
+
+  let totW=0, totL=0, totNet=0;
+  const rows = cities.map(city => {
+    const s = stats[city] || {w:0,l:0,net:0,n:0};
+    const pend = pendMap[city] || 0;
+    totW += s.w; totL += s.l; totNet += s.net;
+    const tot = s.w + s.l;
+    const wr = tot > 0 ? Math.round(s.w/tot*100) : null;
+    const wrStr = wr !== null ? wr + '%' : '—';
+    const wrCol = wr === null ? 'var(--muted)' : wr >= 75 ? 'var(--green)' : wr >= 50 ? 'var(--yellow)' : 'var(--red)';
+    const netStr = s.net > 0 ? '+$'+s.net.toFixed(2) : s.net < 0 ? '-$'+Math.abs(s.net).toFixed(2) : '—';
+    const netCol = s.net > 0 ? 'var(--green)' : s.net < 0 ? 'var(--red)' : 'var(--muted)';
+    const wlStr = s.w + 'W/' + s.l + 'L' + (pend ? '/' + pend + 'P' : '');
+    return `<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+      <td style="padding:4px 4px;font-weight:600;">${city}</td>
+      <td style="padding:4px 4px;text-align:center;color:${wrCol};">${wrStr}</td>
+      <td style="padding:4px 4px;text-align:center;color:var(--muted2);font-size:8px;">${wlStr}</td>
+      <td style="padding:4px 4px;text-align:right;color:${netCol};">${netStr}</td>
+      <td style="padding:4px 4px;text-align:center;color:var(--muted);">${s.n || '—'}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = rows.join('');
+  const totTot = totW + totL;
+  const totWR = totTot > 0 ? Math.round(totW/totTot*100) + '%' : '—';
+  const totNetStr = totNet > 0 ? '+$'+totNet.toFixed(2) : totNet < 0 ? '-$'+Math.abs(totNet).toFixed(2) : '$0';
+  summary.textContent = totWR + ' · ' + totNetStr;
+}
+
+// ── Section 4: 3-day transaction log ─────────────────────────────────────
+let s4Zone = 'all';
+function toggleSection4() {
+  const body = document.getElementById('section4-body');
+  const chev = document.getElementById('s4-chevron');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  chev.textContent = open ? '▶' : '▼';
+  if (!open) renderS4();
+}
+function setS4Zone(z, btn) {
+  s4Zone = z;
+  document.querySelectorAll('#s4-pills .pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderS4();
+}
+function renderS4() {
+  const tbody = document.getElementById('s4-tbody');
+  const statsEl = document.getElementById('s4-stats');
+  if (!tbody) return;
+
+  function txZone(t) {
+    if (t.src === 'T-T') return 'open';
+    return (t.zone || '').toLowerCase();
+  }
+
+  const filtered = s4Zone === 'all'
+    ? THREE_DAY_TX
+    : THREE_DAY_TX.filter(t => txZone(t) === s4Zone || (s4Zone === 'open' && t.src === 'T-T'));
+
+  // Sort: pending TMRW first, then T-T, Y-T, YDAY — alphabetical within group
+  const grpOrder = {'TMRW':1,'T-T':2,'Y-T':3,'YDAY':4};
+  const sorted = [...filtered].sort((a,b) => {
+    const ga = grpOrder[a.src] || 5, gb = grpOrder[b.src] || 5;
+    if (ga !== gb) return ga - gb;
+    return a.city < b.city ? -1 : 1;
+  });
+
+  let wins=0, losses=0, pend=0, netTot=0;
+  let lastSrc = null;
+  const rows = sorted.map(t => {
+    const outcome = t.outcome;
+    let rowStyle = 'border-bottom:1px solid rgba(255,255,255,0.04);';
+    let outcomeCol = 'var(--muted)';
+    const grossStr = outcome === 'PENDING' ? '—' : (t.gross > 0 ? '$'+t.gross.toFixed(2) : '$0.00');
+    let netStr = '—', netCol = 'var(--muted)';
+    if (outcome === 'WIN') {
+      wins++; netTot += t.net;
+      netStr = '+$'+t.net.toFixed(2); netCol = 'var(--green)'; outcomeCol = 'var(--green)';
+    } else if (outcome === 'LOSS') {
+      losses++; netTot += t.net;
+      netStr = '-$'+Math.abs(t.net).toFixed(2); netCol = 'var(--red)'; outcomeCol = 'var(--red)';
+    } else {
+      pend++;
+    }
+    // Group header divider
+    let divider = '';
+    if (t.src !== lastSrc) {
+      const labels = {'TMRW':'TOMORROW PENDING','T-T':'TODAY SIGNALS','Y-T':'TODAY SETTLED','YDAY':'YESTERDAY SETTLED'};
+      divider = `<tr><td colspan="5" style="padding:8px 4px 3px;font-size:7px;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">${labels[t.src]||t.src}</td></tr>`;
+      lastSrc = t.src;
+    }
+    // Actual high for settled
+    const actualStr = (t.intraday_high != null && outcome !== 'PENDING')
+      ? ' <span style="color:var(--yellow);font-size:8px;">' + t.intraday_high + '°</span>' : '';
+    return divider + `<tr style="${rowStyle}">
+      <td style="padding:3px 4px;color:${outcomeCol};">${t.city}</td>
+      <td style="padding:3px 4px;text-align:center;color:var(--muted2);font-size:8px;">${t.src}</td>
+      <td style="padding:3px 4px;color:var(--muted2);font-size:8px;">${t.bracket}${actualStr}</td>
+      <td style="padding:3px 4px;text-align:right;color:var(--muted);">${grossStr}</td>
+      <td style="padding:3px 4px;text-align:right;color:${netCol};">${netStr}</td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:12px;">No transactions for selected zone</td></tr>';
+
+  // Summary bar
+  const totTot = wins + losses;
+  const wr = totTot > 0 ? Math.round(wins/totTot*100) + '%' : '—';
+  const netStr = netTot > 0 ? '+$'+netTot.toFixed(2) : netTot < 0 ? '-$'+Math.abs(netTot).toFixed(2) : '$0.00';
+  const netCol = netTot > 0 ? 'var(--green)' : netTot < 0 ? 'var(--red)' : 'var(--muted)';
+  document.getElementById('s4-stats').innerHTML =
+    `<span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);">${wins}W / ${losses}L / ${pend}P · WR: <span style="color:${parseInt(wr)>=50?'var(--green)':'var(--red)'}">${wr}</span> · Net: <span style="color:${netCol}">${netStr}</span></span>`;
+
+  document.getElementById('s4-summary').textContent = wr + ' · ' + netStr;
+}
 </script>
 </body>
 </html>
