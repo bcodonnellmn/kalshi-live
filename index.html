@@ -21,6 +21,7 @@
     --yellow:   #ffd60a;
     --orange:   #ff8c00;
     --blue:     #3d8bff;
+    --amber:    #FFB800;
     --muted:    #6b6b8a;
     --muted2:   #9898b8;
     --text:     #e8e8f0;
@@ -38,7 +39,20 @@
     display: flex; align-items: center; justify-content: space-between;
   }
   .header-title { font-size: 13px; font-weight: 700; letter-spacing: 2px; color: var(--green); text-transform: uppercase; }
-  .header-time { font-size: 13px; color: var(--text); font-weight: 600; letter-spacing: 0.5px; }
+  .header-time { font-size: 11px; color: var(--muted2); font-weight: 600; letter-spacing: 0.5px; }
+
+  /* ── Kalshi account bar ── */
+  .account-bar {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    background: #0f0f1d; border-bottom: 1px solid var(--border);
+    padding: 8px 12px; gap: 4px;
+  }
+  .acct-item { text-align: center; }
+  .acct-val  { font-size: 15px; font-weight: 700; color: var(--green); }
+  .acct-val.muted { color: var(--muted2); }
+  .acct-lbl  { font-size: 7px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+  .acct-note { font-size: 7px; color: var(--muted); letter-spacing: 0.5px; text-align: center;
+               padding: 2px 12px 4px; border-bottom: 1px solid var(--border); }
 
   /* ── Stats bar ── */
   .stats-bar {
@@ -50,10 +64,11 @@
   .stat-val { font-size: 16px; font-weight: 700; }
   .stat-lbl { font-size: 8px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
   .green { color: var(--green); }
-  .red { color: var(--red); }
-  .yellow { color: var(--yellow); }
+  .red   { color: var(--red); }
+  .yellow{ color: var(--yellow); }
   .muted { color: var(--muted); }
-  .blue { color: var(--blue); }
+  .blue  { color: var(--blue); }
+  .amber { color: var(--amber); }
 
   /* ── Section headers ── */
   .section-hdr {
@@ -62,32 +77,28 @@
   }
   .section-title { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
 
-  /* ── Zone filter pills ── */
-  .zone-pills {
-    display: flex; gap: 5px; padding: 0 16px 8px; flex-wrap: wrap;
-  }
+  /* ── Filter pills — ALL / GATE only ── */
+  .zone-pills { display: flex; gap: 5px; padding: 0 16px 8px; }
   .pill {
-    font-size: 9px; padding: 3px 9px; border-radius: 12px;
+    font-size: 9px; padding: 3px 12px; border-radius: 12px;
     border: 1px solid var(--border); background: none; color: var(--muted);
     cursor: pointer; letter-spacing: 1px; text-transform: uppercase;
     -webkit-appearance: none;
   }
-  .pill.active { background: var(--blue); border-color: var(--blue); color: #fff; }
-  .pill.midday.active { background: var(--green); border-color: var(--green); color: #000; }
-  .pill.open.active { background: var(--yellow); border-color: var(--yellow); color: #000; }
-  .pill.evening.active { background: var(--orange); border-color: var(--orange); color: #000; }
+  .pill.active       { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .pill.gate.active  { background: rgba(0,232,122,0.18); border-color: var(--green); color: var(--green); }
 
   /* ── Checkerboard ── */
   .cb-wrap { overflow-x: auto; padding: 0 16px 4px; }
   .cb-table { border-collapse: collapse; width: 100%; table-layout: fixed; }
   .cb-table th {
-    font-size: 7px; letter-spacing: 0px; color: var(--muted); text-align: center;
+    font-size: 7px; color: var(--muted); text-align: center;
     padding: 3px 1px; border-bottom: 1px solid var(--border); white-space: nowrap;
   }
   .cb-table th.city-col { text-align: left; width: 80px; }
   .cb-table th.data-col { width: 28px; }
-  .cb-table th.tt-col  { color: var(--blue);   font-size: 7px; width: 28px; }
-  .cb-table th.yt-col  { color: var(--muted2); font-size: 7px; width: 28px; }
+  .cb-table th.tt-col   { color: var(--green); font-size: 7px; width: 28px; }
+  .cb-table th.yt-col   { color: var(--amber); font-size: 7px; width: 28px; }
   .cb-table td { padding: 2px 1px; text-align: center; vertical-align: middle; }
   .cb-table td.city-name { text-align: left; font-size: 9px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px; }
   .cb-table tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
@@ -97,21 +108,14 @@
     font-weight: 700; border: 1px solid transparent; margin: 0 auto;
   }
   .cell-win     { background: rgba(0,232,122,0.25); border-color: rgba(0,232,122,0.5); color: var(--green); }
-  .cell-loss    { background: rgba(255,45,85,0.18); border-color: rgba(255,45,85,0.35); color: var(--red); background-image: repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.25) 3px,rgba(0,0,0,0.25) 4px); }
+  .cell-loss    { background: rgba(255,45,85,0.18); border-color: rgba(255,45,85,0.35); color: var(--red);
+                  background-image: repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.25) 3px,rgba(0,0,0,0.25) 4px); }
   .cell-pending { background: rgba(61,139,255,0.15); border-color: rgba(61,139,255,0.3); color: var(--blue); }
   .cell-none    { background: var(--surface2); border-color: var(--border); color: var(--border); }
-  .cell.dim     { opacity: 0.35; }
-
-  /* Zone color dots on cells */
-  .cell-mid { border-color: rgba(0,232,122,0.6) !important; }
-  .cell-opn { border-color: rgba(255,214,10,0.5) !important; }
-  .cell-evn { border-color: rgba(255,140,0,0.5) !important; }
+  .cell.dim     { opacity: 0.3; }
 
   /* ── CB stat row ── */
-  .cb-stats {
-    display: flex; gap: 16px; padding: 6px 16px 10px;
-    font-size: 9px; color: var(--muted);
-  }
+  .cb-stats { display: flex; gap: 16px; padding: 6px 16px 10px; font-size: 9px; color: var(--muted); }
   .cb-stat-val { color: var(--text); font-weight: 700; }
 
   /* ── Transaction cards ── */
@@ -129,27 +133,25 @@
     font-size: 8px; letter-spacing: 1.5px; color: var(--muted);
     padding: 10px 0 5px; border-bottom: 1px solid var(--border); margin-bottom: 6px;
   }
-
   .tx-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
   .tx-city { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: 0.5px; }
   .tx-badges { display: flex; gap: 4px; align-items: center; }
-  .zone-badge {
-    font-size: 8px; padding: 2px 6px; border-radius: 3px; font-weight: 700;
-    letter-spacing: 1px; text-transform: uppercase;
+  .type-badge {
+    font-size: 8px; padding: 2px 6px; border-radius: 3px; font-weight: 700; letter-spacing: 1px;
   }
-  .badge-midday { background: rgba(0,232,122,0.15); color: var(--green); border: 1px solid rgba(0,232,122,0.3); }
-  .badge-open   { background: rgba(255,214,10,0.12); color: var(--yellow); border: 1px solid rgba(255,214,10,0.3); }
-  .badge-evening{ background: rgba(255,140,0,0.12); color: var(--orange); border: 1px solid rgba(255,140,0,0.3); }
+  .badge-tt   { background: rgba(0,232,122,0.15); color: var(--green); border: 1px solid rgba(0,232,122,0.35); }
+  .badge-yt   { background: rgba(255,184,0,0.15); color: var(--amber); border: 1px solid rgba(255,184,0,0.4); }
+  .badge-tmrw { background: rgba(61,139,255,0.15); color: var(--blue); border: 1px solid rgba(61,139,255,0.35); }
+  .badge-yday { background: rgba(152,152,184,0.15); color: var(--muted2); border: 1px solid rgba(152,152,184,0.3); }
   .settle-badge {
     font-size: 8px; padding: 2px 6px; border-radius: 3px;
-    background: rgba(61,139,255,0.12); color: var(--blue);
-    border: 1px solid rgba(61,139,255,0.25); letter-spacing: 1px;
-  }
-  .do-not-trade-bar {
-    font-size: 9px; color: var(--orange); letter-spacing: 1px;
-    margin-bottom: 5px; text-transform: uppercase; font-weight: 700;
+    background: rgba(61,139,255,0.1); color: var(--blue); border: 1px solid rgba(61,139,255,0.25); letter-spacing: 1px;
   }
   .tx-meta { font-size: 9px; color: var(--muted); margin-bottom: 8px; }
+  .outcome-bar { font-size: 9px; letter-spacing: 1px; margin-bottom: 5px; font-weight: 700; text-transform: uppercase; }
+  .outcome-bar.win  { color: var(--green); }
+  .outcome-bar.loss { color: var(--red); }
+  .outcome-bar.gate-excl { color: var(--muted); font-style: italic; }
 
   .tx-signals { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
   .sig-line {
@@ -157,20 +159,14 @@
     background: rgba(0,232,122,0.07); border: 1px solid rgba(0,232,122,0.2);
     color: var(--green); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .sig-line.adj {
-    background: rgba(61,139,255,0.07); border-color: rgba(61,139,255,0.2);
-    color: var(--blue);
-  }
+  .sig-line.adj { background: rgba(61,139,255,0.07); border-color: rgba(61,139,255,0.2); color: var(--blue); }
 
-  .tx-fin {
-    display: grid; grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
-  }
+  .tx-fin { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
   .fin-box { background: var(--surface2); border-radius: 6px; padding: 6px 8px; text-align: center; }
   .fin-lbl { font-size: 7px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
   .fin-val { font-size: 12px; font-weight: 700; }
 
-  /* ── Recently fired banner ── */
+  /* ── Recent fired banner ── */
   .recent-banner {
     font-size: 8px; padding: 2px 8px; border-radius: 10px; display: inline-block;
     background: rgba(0,232,122,0.12); color: var(--green); border: 1px solid rgba(0,232,122,0.3);
@@ -178,10 +174,17 @@
   }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
+  /* ── Day subtotal row ── */
+  .subtotal-row td {
+    background: rgba(255,255,255,0.04) !important;
+    border-top: 1px solid var(--border);
+    border-bottom: 2px solid var(--border);
+    font-size: 8px; letter-spacing: 0.5px;
+  }
+
   /* ── Empty state ── */
   .empty { text-align: center; color: var(--muted); font-size: 11px; padding: 24px 16px; }
 
-  /* ── Tablet 2-col ── */
   @media (min-width: 640px) {
     .tx-list { display: grid; grid-template-columns: 1fr 1fr; }
     .stats-bar { padding: 12px 20px; }
@@ -191,29 +194,48 @@
 </head>
 <body>
 
-  <!-- Password gate — shown before dashboard -->
-  <div id="gate" style="position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
-    <div style="font-size:11px;letter-spacing:3px;color:var(--green);text-transform:uppercase;">⚡ Kalshi Live</div>
-    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Enter PIN</div>
-    <input id="pin-input" type="password" inputmode="numeric" maxlength="4"
-      style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:24px;letter-spacing:8px;text-align:center;padding:12px 20px;width:160px;outline:none;"
-      placeholder="····" autocomplete="off">
-    <div id="pin-err" style="font-size:9px;color:var(--red);letter-spacing:1px;min-height:14px;"></div>
-    <button onclick="checkPin()"
-      style="background:var(--green);color:#000;border:none;border-radius:8px;padding:10px 32px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;">
-      ENTER
-    </button>
-  </div>
+<!-- PIN gate -->
+<div id="gate" style="position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <div style="font-size:11px;letter-spacing:3px;color:var(--green);text-transform:uppercase;">⚡ Kalshi Live</div>
+  <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Enter PIN</div>
+  <input id="pin-input" type="password" inputmode="numeric" maxlength="4"
+    style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:24px;letter-spacing:8px;text-align:center;padding:12px 20px;width:160px;outline:none;"
+    placeholder="····" autocomplete="off">
+  <div id="pin-err" style="font-size:9px;color:var(--red);letter-spacing:1px;min-height:14px;"></div>
+  <button onclick="checkPin()"
+    style="background:var(--green);color:#000;border:none;border-radius:8px;padding:10px 32px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:2px;cursor:pointer;">
+    ENTER
+  </button>
+</div>
 
+<!-- Header -->
 <div class="header">
   <div class="header-title">⚡ Kalshi Live</div>
   <div class="header-time" id="upd-time">Updated —</div>
 </div>
 
+<!-- Kalshi Account bar (baked from pipeline) -->
+<div class="account-bar" id="account-bar">
+  <div class="acct-item">
+    <div class="acct-val" id="acct-cash">—</div>
+    <div class="acct-lbl">Available Cash</div>
+  </div>
+  <div class="acct-item">
+    <div class="acct-val muted" id="acct-portfolio">—</div>
+    <div class="acct-lbl">Open Positions</div>
+  </div>
+  <div class="acct-item">
+    <div class="acct-val" id="acct-bank">—</div>
+    <div class="acct-lbl">Total Bank</div>
+  </div>
+</div>
+<div class="acct-note">Kalshi balance from last pipeline run · not live</div>
+
+<!-- Stats bar -->
 <div class="stats-bar" id="stats-bar">
   <div class="stat">
     <div class="stat-val" id="s-wr">—</div>
-    <div class="stat-lbl">Win Rate</div>
+    <div class="stat-lbl">Gate WR</div>
   </div>
   <div class="stat">
     <div class="stat-val" id="s-wl">—</div>
@@ -221,23 +243,22 @@
   </div>
   <div class="stat">
     <div class="stat-val" id="s-pnl">—</div>
-    <div class="stat-lbl">Net P&L</div>
+    <div class="stat-lbl">Gate P&L</div>
   </div>
   <div class="stat">
-    <div class="stat-val" id="s-bank">—</div>
-    <div class="stat-lbl">Bank</div>
+    <div class="stat-val" id="s-pend">—</div>
+    <div class="stat-lbl">Pending</div>
   </div>
 </div>
 
 <!-- CHECKERBOARD -->
 <div class="section-hdr">
   <span class="section-title">Signal Checkerboard</span>
+  <span id="cb-gate-label" style="font-size:8px;color:var(--green);font-family:'Courier New',monospace;display:none;">★ GATE</span>
 </div>
 <div class="zone-pills" id="cb-pills">
   <button class="pill active" onclick="setCBZone('all',this)">ALL</button>
-  <button class="pill open" onclick="setCBZone('open',this)">OPEN</button>
-  <button class="pill midday" onclick="setCBZone('midday',this)">MIDDAY</button>
-  <button class="pill evening" onclick="setCBZone('evening',this)">EVENING</button>
+  <button class="pill gate"   onclick="setCBZone('gate',this)">GATE ★</button>
 </div>
 <div class="cb-wrap">
   <table class="cb-table" id="cb-table">
@@ -247,29 +268,27 @@
 </div>
 <div class="cb-stats" id="cb-stats"></div>
 
-<!-- SECTION 3: PER-CITY WIN RATES (10-day) — sits after checkerboard -->
+<!-- PER-CITY WIN RATES -->
 <div class="section-hdr" style="cursor:pointer;user-select:none;" onclick="toggleSection3()">
-  <span class="section-title">Per-City Win Rates <span id="s3-chevron" style="font-size:10px;margin-left:4px;">▶</span></span>
-  <span id="s3-summary" style="font-size:9px;font-family:'Space Mono',monospace;color:var(--muted);margin-left:8px;"></span>
+  <span class="section-title">Per-City P&L <span id="s3-chevron" style="font-size:10px;margin-left:4px;">▶</span></span>
+  <span id="s3-summary" style="font-size:9px;font-family:'Courier New',monospace;color:var(--muted);"></span>
 </div>
 <div id="section3-body" style="display:none;">
   <div class="zone-pills" id="s3-pills">
     <button class="pill active" onclick="setS3Zone('all',this)">ALL</button>
-    <button class="pill open" onclick="setS3Zone('open',this)">OPEN</button>
-    <button class="pill midday" onclick="setS3Zone('midday',this)">MIDDAY</button>
-    <button class="pill evening" onclick="setS3Zone('evening',this)">EVENING</button>
+    <button class="pill gate"   onclick="setS3Zone('gate',this)">GATE ★</button>
   </div>
-  <div style="padding:0 16px 4px;font-size:8px;color:var(--muted);font-family:'Space Mono',monospace;">T-T signals counted under OPEN · 10-day window · settle ≥ May 23</div>
-  <div id="s3-pri-adj" style="padding:0 16px 8px;font-size:9px;font-family:'Space Mono',monospace;color:var(--muted);"></div>
+  <div style="padding:0 16px 4px;font-size:8px;color:var(--muted);font-family:'Courier New',monospace;">GATE = strict signal criteria · settle ≥ May 23</div>
+  <div id="s3-pri-adj" style="padding:0 16px 8px;font-size:9px;font-family:'Courier New',monospace;color:var(--muted);"></div>
   <div id="s3-table-wrap" style="padding:0 16px 16px;overflow-x:auto;">
-    <table id="s3-table" style="width:100%;border-collapse:collapse;font-size:9px;font-family:'Space Mono',monospace;min-width:260px;">
+    <table id="s3-table" style="width:100%;border-collapse:collapse;font-size:9px;font-family:'Courier New',monospace;min-width:260px;">
       <thead>
         <tr style="border-bottom:1px solid var(--border);">
           <th style="text-align:left;padding:4px 6px;font-size:8px;color:var(--muted);letter-spacing:1px;">CITY</th>
-          <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">10D WR</th>
+          <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">WR</th>
           <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">W/L/P</th>
           <th style="text-align:right;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">NET P&amp;L</th>
-          <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">#</th>
+          <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">GATE</th>
         </tr>
       </thead>
       <tbody id="s3-tbody"></tbody>
@@ -283,32 +302,30 @@
 </div>
 <div class="zone-pills" id="tx-pills">
   <button class="pill active" onclick="setTXZone('all',this)">ALL</button>
-  <button class="pill open" onclick="setTXZone('open',this)">OPEN</button>
-  <button class="pill midday" onclick="setTXZone('midday',this)">MIDDAY</button>
-  <button class="pill evening" onclick="setTXZone('evening',this)">EVENING</button>
+  <button class="pill gate"   onclick="setTXZone('gate',this)">GATE ★</button>
 </div>
 <div class="tx-list" id="tx-list"></div>
 
-<!-- SECTION 4: 3-DAY TRANSACTION LOG -->
+<!-- 3-DAY TRANSACTION LOG -->
 <div class="section-hdr" style="cursor:pointer;user-select:none;" onclick="toggleSection4()">
   <span class="section-title">3-Day Transaction Log <span id="s4-chevron" style="font-size:10px;margin-left:4px;">▼</span></span>
-  <span id="s4-summary" style="font-size:9px;font-family:'Space Mono',monospace;color:var(--muted);margin-left:8px;"></span>
+  <span id="s4-summary" style="font-size:9px;font-family:'Courier New',monospace;color:var(--muted);"></span>
 </div>
 <div id="section4-body" style="display:block;">
   <div class="zone-pills" id="s4-pills">
     <button class="pill active" onclick="setS4Zone('all',this)">ALL</button>
-    <button class="pill open" onclick="setS4Zone('open',this)">OPEN</button>
-    <button class="pill midday" onclick="setS4Zone('midday',this)">MIDDAY</button>
-    <button class="pill evening" onclick="setS4Zone('evening',this)">EVENING</button>
+    <button class="pill gate"   onclick="setS4Zone('gate',this)">GATE ★</button>
   </div>
-  <div style="padding:0 16px 4px;font-size:8px;color:var(--muted);font-family:'Space Mono',monospace;">T-T counted under OPEN · TMRW=pending TMRW signal · T-T=today-signal→today · Y-T=yesterday-signal→today · YDAY=settled yday</div>
-  <div style="padding:0 16px 4px;" id="s4-stats" style="font-size:9px;font-family:'Space Mono',monospace;"></div>
+  <div style="padding:0 16px 4px;font-size:8px;color:var(--muted);font-family:'Courier New',monospace;">
+    Y-T=yesterday→today · T-T=follow-on today · TMRW=pending tomorrow · YDAY=settled yesterday
+  </div>
+  <div style="padding:0 16px 4px;" id="s4-stats"></div>
   <div style="padding:0 16px 16px;overflow-x:auto;">
-    <table id="s4-table" style="width:100%;border-collapse:collapse;font-size:9px;font-family:'Space Mono',monospace;min-width:300px;">
+    <table id="s4-table" style="width:100%;border-collapse:collapse;font-size:9px;font-family:'Courier New',monospace;min-width:300px;">
       <thead>
         <tr style="border-bottom:1px solid var(--border);">
           <th style="text-align:left;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">CITY</th>
-          <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">SIG</th>
+          <th style="text-align:center;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">TYPE</th>
           <th style="text-align:left;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">BRACKET</th>
           <th style="text-align:right;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">GROSS</th>
           <th style="text-align:right;padding:4px 4px;font-size:8px;color:var(--muted);letter-spacing:1px;">NET</th>
@@ -321,63 +338,101 @@
 
 <script>
 // ── Baked-in data ──────────────────────────────────────────────────────────
-const PEAKS = [{"city": "Miami", "bracket": "90\u00b0 to 91\u00b0", "adj": "88\u00b0 to 89\u00b0", "price": 35, "adj_price": 7, "edge": 11, "zone": "OPEN", "target": "2026-06-01", "fired_str": "06-01 8:00am", "spent": 99.68, "win_primary": 42.32, "win_adjacent": 614.32, "age_min": 100, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "today", "outcome": "PENDING", "top_mkt": "94\u00b0 or above", "top_mkt_pct": 24, "intraday_high": 84, "tx_group": 1}, {"city": "Seattle", "bracket": "73\u00b0 to 74\u00b0", "adj": "71\u00b0 to 72\u00b0", "price": 19, "adj_price": 6, "edge": 28, "zone": "OPEN", "target": "2026-06-01", "fired_str": "06-01 7:55am", "spent": 99.95, "win_primary": 163.05, "win_adjacent": 733.05, "age_min": 105, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "today", "outcome": "PENDING", "top_mkt": "75\u00b0 to 76\u00b0", "top_mkt_pct": 65, "intraday_high": 60.1, "tx_group": 1}, {"city": "Los Angeles", "bracket": "70\u00b0 to 71\u00b0", "adj": "68\u00b0 to 69\u00b0", "price": 27, "adj_price": 6, "edge": 20, "zone": "EVENING", "target": "2026-06-01", "fired_str": "05-31 9:05pm", "spent": 99.93, "win_primary": 85.07, "win_adjacent": 733.07, "age_min": 755, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 71.1, "tx_group": 3}, {"city": "Minneapolis", "bracket": "80\u00b0 to 81\u00b0", "adj": "78\u00b0 to 79\u00b0", "price": 28, "adj_price": 13, "edge": 12, "zone": "MIDDAY", "target": "2026-06-01", "fired_str": "05-31 12:30pm", "spent": 99.76, "win_primary": 78.24, "win_adjacent": 284.24, "age_min": 1270, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 71.1, "tx_group": 3}, {"city": "Philadelphia", "bracket": "77\u00b0 to 78\u00b0", "adj": "75\u00b0 to 76\u00b0", "price": 27, "adj_price": 8, "edge": 18, "zone": "OPEN", "target": "2026-06-01", "fired_str": "05-31 11:00am", "spent": 99.95, "win_primary": 85.05, "win_adjacent": 525.05, "age_min": 1360, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 78.1, "tx_group": 3}, {"city": "Seattle", "bracket": "73\u00b0 to 74\u00b0", "adj": "71\u00b0 to 72\u00b0", "price": 29, "adj_price": 6, "edge": 18, "zone": "EVENING", "target": "2026-06-01", "fired_str": "05-31 7:05pm", "spent": 99.86, "win_primary": 72.14, "win_adjacent": 733.14, "age_min": 875, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 66.9, "tx_group": 3}, {"city": "New Orleans", "bracket": "88\u00b0 to 89\u00b0", "adj": "86\u00b0 to 87\u00b0", "price": 29, "adj_price": 6, "edge": 18, "zone": "MIDDAY", "target": "2026-05-31", "fired_str": "05-30 1:10pm", "spent": 99.86, "win_primary": 72.14, "win_adjacent": 733.14, "age_min": 2670, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 89.1, "tx_group": 4}, {"city": "Oklahoma City", "bracket": "99\u00b0 to 100\u00b0", "adj": "101\u00b0 to 102\u00b0", "price": 25, "adj_price": 6, "edge": 20, "zone": "MIDDAY", "target": "2026-05-31", "fired_str": "05-30 12:24pm", "spent": 99.98, "win_primary": 100.02, "win_adjacent": 733.02, "age_min": 2716, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 90, "tx_group": 4}, {"city": "Philadelphia", "bracket": "76\u00b0 to 77\u00b0", "adj": "74\u00b0 to 75\u00b0", "price": 31, "adj_price": 6, "edge": 16, "zone": "OPEN", "target": "2026-05-31", "fired_str": "05-30 11:01am", "spent": 99.89, "win_primary": 61.11, "win_adjacent": 733.11, "age_min": 2800, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 71.1, "tx_group": 4}];
-const CB_DATA = {"Miami": {"2026-06-01": {"zone": "OPEN", "outcome": "PENDING", "bracket": "90\u00b0 to 91\u00b0"}}, "Seattle": {"2026-06-01": {"zone": "OPEN", "outcome": "PENDING", "bracket": "73\u00b0 to 74\u00b0"}}, "Los Angeles": {"2026-06-01": {"zone": "EVENING", "outcome": "PENDING", "bracket": "70\u00b0 to 71\u00b0"}}, "Philadelphia": {"2026-06-01": {"zone": "OPEN", "outcome": "PENDING", "bracket": "77\u00b0 to 78\u00b0"}, "2026-05-31": {"zone": "OPEN", "outcome": "LOSS", "bracket": "76\u00b0 to 77\u00b0"}}, "Minneapolis": {"2026-06-01": {"zone": "MIDDAY", "outcome": "PENDING", "bracket": "80\u00b0 to 81\u00b0"}}, "Oklahoma City": {"2026-05-31": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "99\u00b0 to 100\u00b0"}}, "New Orleans": {"2026-05-31": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "88\u00b0 to 89\u00b0"}}};
-const CB_CITIES = ["Los Angeles", "Miami", "Minneapolis", "New Orleans", "Oklahoma City", "Philadelphia", "Seattle"];
-const CB_DATES = ["2026-06-02", "2026-06-01", "2026-05-31"];
-const CB4 = {"tmrw": {}, "tt": {"Miami": {"zone": "OPEN", "outcome": "PENDING", "bracket": "90\u00b0 to 91\u00b0"}, "Seattle": {"zone": "OPEN", "outcome": "PENDING", "bracket": "73\u00b0 to 74\u00b0"}}, "yt": {"Los Angeles": {"zone": "EVENING", "outcome": "PENDING", "bracket": "70\u00b0 to 71\u00b0"}, "Philadelphia": {"zone": "OPEN", "outcome": "PENDING", "bracket": "77\u00b0 to 78\u00b0"}, "Minneapolis": {"zone": "MIDDAY", "outcome": "PENDING", "bracket": "80\u00b0 to 81\u00b0"}}, "yday": {"Philadelphia": {"zone": "OPEN", "outcome": "LOSS", "bracket": "76\u00b0 to 77\u00b0"}, "Oklahoma City": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "99\u00b0 to 100\u00b0"}, "New Orleans": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "88\u00b0 to 89\u00b0"}}, "cities": ["Los Angeles", "Miami", "Minneapolis", "New Orleans", "Oklahoma City", "Philadelphia", "Seattle"]};
-const CITY_STATS = {"cities": {"New Orleans": {"w": 0, "l": 1, "net": -99.86, "n": 1, "pri": 0, "adj": 0}, "Oklahoma City": {"w": 0, "l": 1, "net": -99.98, "n": 1, "pri": 0, "adj": 0}, "Philadelphia": {"w": 0, "l": 1, "net": -99.89, "n": 1, "pri": 0, "adj": 0}}, "pri_wins": 0, "adj_wins": 0};
-const THREE_DAY_TX = [{"city": "Miami", "src": "T-T", "bracket": "90\u00b0 to 91\u00b0", "zone": "OPEN", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 1, "intraday_high": 84}, {"city": "Seattle", "src": "T-T", "bracket": "73\u00b0 to 74\u00b0", "zone": "OPEN", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 1, "intraday_high": 60.1}, {"city": "Los Angeles", "src": "Y-T", "bracket": "70\u00b0 to 71\u00b0", "zone": "EVENING", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 3, "intraday_high": 71.1}, {"city": "Minneapolis", "src": "Y-T", "bracket": "80\u00b0 to 81\u00b0", "zone": "MIDDAY", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 3, "intraday_high": 71.1}, {"city": "Philadelphia", "src": "Y-T", "bracket": "77\u00b0 to 78\u00b0", "zone": "OPEN", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 3, "intraday_high": 78.1}, {"city": "Seattle", "src": "Y-T", "bracket": "73\u00b0 to 74\u00b0", "zone": "EVENING", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 3, "intraday_high": 66.9}, {"city": "New Orleans", "src": "YDAY", "bracket": "88\u00b0 to 89\u00b0", "zone": "MIDDAY", "outcome": "LOSS", "gross": 0.0, "net": -99.86, "target": "2026-05-31", "tx_group": 4, "intraday_high": 89.1}, {"city": "Oklahoma City", "src": "YDAY", "bracket": "99\u00b0 to 100\u00b0", "zone": "MIDDAY", "outcome": "LOSS", "gross": 0.0, "net": -99.98, "target": "2026-05-31", "tx_group": 4, "intraday_high": 90}, {"city": "Philadelphia", "src": "YDAY", "bracket": "76\u00b0 to 77\u00b0", "zone": "OPEN", "outcome": "LOSS", "gross": 0.0, "net": -99.89, "target": "2026-05-31", "tx_group": 4, "intraday_high": 71.1}];
-const STATS = {"wins": 6, "losses": 9, "win_rate": 40, "net_pnl": -411.25, "bank": 588.75, "updated": "9:35 AM CDT", "today": "2026-06-01", "tomorrow": "2026-06-02", "yesterday": "2026-05-31"};
-const ALL_SETTLED = [{"zone": "OPEN", "outcome": "LOSS", "net": -99.86}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.92}, {"zone": "MIDDAY", "outcome": "WIN", "net": 85.07}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.89}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.74}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.91}, {"zone": "EVENING", "outcome": "WIN", "net": 525.06}, {"zone": "EVENING", "outcome": "WIN", "net": 51.19}, {"zone": "MIDDAY", "outcome": "WIN", "net": 85.07}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.86}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.89}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.92}, {"zone": "OPEN", "outcome": "WIN", "net": 100.14}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.79}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.84}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.92}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.91}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.89}, {"zone": "EVENING", "outcome": "WIN", "net": 108.13}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.84}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.98}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.7}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.94}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.78}, {"zone": "OPEN", "outcome": "WIN", "net": 61.09}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.93}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.98}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.96}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.78}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.93}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.79}, {"zone": "EVENING", "outcome": "WIN", "net": 85.05}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.95}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.78}, {"zone": "OPEN", "outcome": "WIN", "net": 177.16}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.92}, {"zone": "EVENING", "outcome": "WIN", "net": 85.1}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.9}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.76}, {"zone": "OPEN", "outcome": "WIN", "net": 194.04}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.84}, {"zone": "MIDDAY", "outcome": "WIN", "net": 100.0}, {"zone": "OPEN", "outcome": "WIN", "net": 61.11}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.84}, {"zone": "MIDDAY", "outcome": "WIN", "net": 61.09}, {"zone": "EVENING", "outcome": "WIN", "net": 66.2}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.68}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9}, {"zone": "MIDDAY", "outcome": "WIN", "net": 78.18}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.86}, {"zone": "MIDDAY", "outcome": "WIN", "net": 78.24}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.91}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.91}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.89}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.89}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.98}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.7}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.86}];
+const PEAKS        = [{"city": "Miami", "bracket": "90\u00b0 to 91\u00b0", "adj": "88\u00b0 to 89\u00b0", "price": 35, "adj_price": 7, "edge": 11, "zone": "OPEN", "target": "2026-06-01", "fired_str": "06-01 8:00am", "spent": 99.68, "win_primary": 42.32, "win_adjacent": 614.32, "age_min": 105, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "today", "src": "T-T", "outcome": "PENDING", "top_mkt": "94\u00b0 or above", "top_mkt_pct": 26, "intraday_high": 84, "fired_hour": 8, "tx_group": 1}, {"city": "Seattle", "bracket": "73\u00b0 to 74\u00b0", "adj": "71\u00b0 to 72\u00b0", "price": 19, "adj_price": 6, "edge": 28, "zone": "OPEN", "target": "2026-06-01", "fired_str": "06-01 7:55am", "spent": 99.95, "win_primary": 163.05, "win_adjacent": 733.05, "age_min": 110, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "today", "src": "T-T", "outcome": "PENDING", "top_mkt": "75\u00b0 to 76\u00b0", "top_mkt_pct": 66, "intraday_high": 60.1, "fired_hour": 7, "tx_group": 1}, {"city": "Los Angeles", "bracket": "70\u00b0 to 71\u00b0", "adj": "68\u00b0 to 69\u00b0", "price": 27, "adj_price": 6, "edge": 20, "zone": "EVENING", "target": "2026-06-01", "fired_str": "05-31 9:05pm", "spent": 99.93, "win_primary": 85.07, "win_adjacent": 733.07, "age_min": 760, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "src": "Y-T", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 71.1, "fired_hour": 21, "tx_group": 3}, {"city": "Minneapolis", "bracket": "80\u00b0 to 81\u00b0", "adj": "78\u00b0 to 79\u00b0", "price": 28, "adj_price": 13, "edge": 12, "zone": "MIDDAY", "target": "2026-06-01", "fired_str": "05-31 12:30pm", "spent": 99.76, "win_primary": 78.24, "win_adjacent": 284.24, "age_min": 1275, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "src": "Y-T", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 71.1, "fired_hour": 12, "tx_group": 3}, {"city": "Philadelphia", "bracket": "77\u00b0 to 78\u00b0", "adj": "75\u00b0 to 76\u00b0", "price": 27, "adj_price": 8, "edge": 18, "zone": "OPEN", "target": "2026-06-01", "fired_str": "05-31 11:00am", "spent": 99.95, "win_primary": 85.05, "win_adjacent": 525.05, "age_min": 1365, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "src": "Y-T", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 78.1, "fired_hour": 11, "tx_group": 3}, {"city": "Seattle", "bracket": "73\u00b0 to 74\u00b0", "adj": "71\u00b0 to 72\u00b0", "price": 29, "adj_price": 6, "edge": 18, "zone": "EVENING", "target": "2026-06-01", "fired_str": "05-31 7:05pm", "spent": 99.86, "win_primary": 72.14, "win_adjacent": 733.14, "age_min": 880, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "src": "Y-T", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 66.9, "fired_hour": 19, "tx_group": 3}, {"city": "New Orleans", "bracket": "88\u00b0 to 89\u00b0", "adj": "86\u00b0 to 87\u00b0", "price": 29, "adj_price": 6, "edge": 18, "zone": "MIDDAY", "target": "2026-05-31", "fired_str": "05-30 1:10pm", "spent": 99.86, "win_primary": 72.14, "win_adjacent": 733.14, "age_min": 2675, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "src": "YDAY", "outcome": "LOSS", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 89.1, "fired_hour": 13, "tx_group": 4}, {"city": "Oklahoma City", "bracket": "99\u00b0 to 100\u00b0", "adj": "101\u00b0 to 102\u00b0", "price": 25, "adj_price": 6, "edge": 20, "zone": "MIDDAY", "target": "2026-05-31", "fired_str": "05-30 12:24pm", "spent": 99.98, "win_primary": 100.02, "win_adjacent": 733.02, "age_min": 2721, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "src": "YDAY", "outcome": "LOSS", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 90, "fired_hour": 12, "tx_group": 4}, {"city": "Philadelphia", "bracket": "76\u00b0 to 77\u00b0", "adj": "74\u00b0 to 75\u00b0", "price": 31, "adj_price": 6, "edge": 16, "zone": "OPEN", "target": "2026-05-31", "fired_str": "05-30 11:01am", "spent": 99.89, "win_primary": 61.11, "win_adjacent": 733.11, "age_min": 2805, "is_today": false, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "src": "YDAY", "outcome": "LOSS", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 71.1, "fired_hour": 11, "tx_group": 4}];
+const CB_DATA      = {"Miami": {"2026-06-01": {"zone": "OPEN", "outcome": "PENDING", "bracket": "90\u00b0 to 91\u00b0"}}, "Seattle": {"2026-06-01": {"zone": "OPEN", "outcome": "PENDING", "bracket": "73\u00b0 to 74\u00b0"}}, "Los Angeles": {"2026-06-01": {"zone": "EVENING", "outcome": "PENDING", "bracket": "70\u00b0 to 71\u00b0"}}, "Philadelphia": {"2026-06-01": {"zone": "OPEN", "outcome": "PENDING", "bracket": "77\u00b0 to 78\u00b0"}, "2026-05-31": {"zone": "OPEN", "outcome": "LOSS", "bracket": "76\u00b0 to 77\u00b0"}}, "Minneapolis": {"2026-06-01": {"zone": "MIDDAY", "outcome": "PENDING", "bracket": "80\u00b0 to 81\u00b0"}}, "Oklahoma City": {"2026-05-31": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "99\u00b0 to 100\u00b0"}}, "New Orleans": {"2026-05-31": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "88\u00b0 to 89\u00b0"}}};
+const CB_CITIES    = ["Los Angeles", "Miami", "Minneapolis", "New Orleans", "Oklahoma City", "Philadelphia", "Seattle"];
+const CB_DATES     = ["2026-06-02", "2026-06-01", "2026-05-31"];
+const CB4          = {"tmrw": {}, "tt": {"Miami": {"zone": "OPEN", "outcome": "PENDING", "bracket": "90\u00b0 to 91\u00b0"}, "Seattle": {"zone": "OPEN", "outcome": "PENDING", "bracket": "73\u00b0 to 74\u00b0"}}, "yt": {"Los Angeles": {"zone": "EVENING", "outcome": "PENDING", "bracket": "70\u00b0 to 71\u00b0"}, "Philadelphia": {"zone": "OPEN", "outcome": "PENDING", "bracket": "77\u00b0 to 78\u00b0"}, "Minneapolis": {"zone": "MIDDAY", "outcome": "PENDING", "bracket": "80\u00b0 to 81\u00b0"}}, "yday": {"Philadelphia": {"zone": "OPEN", "outcome": "LOSS", "bracket": "76\u00b0 to 77\u00b0"}, "Oklahoma City": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "99\u00b0 to 100\u00b0"}, "New Orleans": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "88\u00b0 to 89\u00b0"}}, "cities": ["Los Angeles", "Miami", "Minneapolis", "New Orleans", "Oklahoma City", "Philadelphia", "Seattle"]};
+const CITY_STATS   = {"cities": {"New Orleans": {"w": 0, "l": 1, "net": -99.86, "n": 1, "pri": 0, "adj": 0, "net_pnl": -414.39}, "Oklahoma City": {"w": 0, "l": 1, "net": -99.98, "n": 1, "pri": 0, "adj": 0, "net_pnl": -314.49}, "Philadelphia": {"w": 0, "l": 1, "net": -99.89, "n": 1, "pri": 0, "adj": 0, "net_pnl": 124.45}, "Chicago": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -399.57}, "Los Angeles": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -499.71}, "Denver": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -21.65}, "Minneapolis": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -199.44}, "Seattle": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -199.8}, "Dallas": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": 291.71}, "San Francisco": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -87.56}, "San Antonio": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -53.31}, "Austin": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -399.58}, "Boston": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": 371.56}, "Houston": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": 0.16}, "New York": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": 108.13}, "Washington DC": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -199.84}, "Atlanta": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -299.45}, "Miami": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -99.84}, "Las Vegas": {"w": 0, "l": 0, "net": 0.0, "n": 0, "pri": 0, "adj": 0, "net_pnl": -99.68}}, "pri_wins": 0, "adj_wins": 0};
+const THREE_DAY_TX = [{"city": "Miami", "src": "T-T", "bracket": "90\u00b0 to 91\u00b0", "zone": "OPEN", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 1, "intraday_high": 84, "price": 35, "edge": 11, "fired_hour": 8}, {"city": "Seattle", "src": "T-T", "bracket": "73\u00b0 to 74\u00b0", "zone": "OPEN", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 1, "intraday_high": 60.1, "price": 19, "edge": 28, "fired_hour": 7}, {"city": "Los Angeles", "src": "Y-T", "bracket": "70\u00b0 to 71\u00b0", "zone": "EVENING", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 3, "intraday_high": 71.1, "price": 27, "edge": 20, "fired_hour": 21}, {"city": "Minneapolis", "src": "Y-T", "bracket": "80\u00b0 to 81\u00b0", "zone": "MIDDAY", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 3, "intraday_high": 71.1, "price": 28, "edge": 12, "fired_hour": 12}, {"city": "Philadelphia", "src": "Y-T", "bracket": "77\u00b0 to 78\u00b0", "zone": "OPEN", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 3, "intraday_high": 78.1, "price": 27, "edge": 18, "fired_hour": 11}, {"city": "Seattle", "src": "Y-T", "bracket": "73\u00b0 to 74\u00b0", "zone": "EVENING", "outcome": "PENDING", "gross": 0.0, "net": 0.0, "target": "2026-06-01", "tx_group": 3, "intraday_high": 66.9, "price": 29, "edge": 18, "fired_hour": 19}, {"city": "New Orleans", "src": "YDAY", "bracket": "88\u00b0 to 89\u00b0", "zone": "MIDDAY", "outcome": "LOSS", "gross": 0.0, "net": -99.86, "target": "2026-05-31", "tx_group": 4, "intraday_high": 89.1, "price": 29, "edge": 18, "fired_hour": 13}, {"city": "Oklahoma City", "src": "YDAY", "bracket": "99\u00b0 to 100\u00b0", "zone": "MIDDAY", "outcome": "LOSS", "gross": 0.0, "net": -99.98, "target": "2026-05-31", "tx_group": 4, "intraday_high": 90, "price": 25, "edge": 20, "fired_hour": 12}, {"city": "Philadelphia", "src": "YDAY", "bracket": "76\u00b0 to 77\u00b0", "zone": "OPEN", "outcome": "LOSS", "gross": 0.0, "net": -99.89, "target": "2026-05-31", "tx_group": 4, "intraday_high": 71.1, "price": 31, "edge": 16, "fired_hour": 11}];
+const STATS        = {"wins": 6, "losses": 9, "win_rate": 40, "net_pnl": -411.25, "bank": 588.75, "updated": "9:45 AM CDT", "today": "2026-06-01", "tomorrow": "2026-06-02", "yesterday": "2026-05-31", "kalshi_cash": null, "kalshi_port": null};
+const ALL_SETTLED  = [{"zone": "OPEN", "outcome": "LOSS", "net": -99.86, "city": "Chicago", "price": 18, "edge": 28, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.92, "city": "Los Angeles", "price": 22, "edge": 25, "fired_hour": 10, "src": "Y-T", "sig_gate": false}, {"zone": "MIDDAY", "outcome": "WIN", "net": 85.07, "city": "Philadelphia", "price": 27, "edge": 19, "fired_hour": 12, "src": "Y-T", "sig_gate": true}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.89, "city": "Denver", "price": 11, "edge": 15, "fired_hour": 21, "src": "Y-T", "sig_gate": false}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.74, "city": "Minneapolis", "price": 30, "edge": 12, "fired_hour": 15, "src": "Y-T", "sig_gate": true}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.91, "city": "Seattle", "price": 31, "edge": 12, "fired_hour": 23, "src": "Y-T", "sig_gate": false}, {"zone": "EVENING", "outcome": "WIN", "net": 525.06, "city": "Dallas", "price": 8, "edge": 33, "fired_hour": 17, "src": "Y-T", "sig_gate": false}, {"zone": "EVENING", "outcome": "WIN", "net": 51.19, "city": "San Francisco", "price": 33, "edge": 14, "fired_hour": 16, "src": "Y-T", "sig_gate": true}, {"zone": "MIDDAY", "outcome": "WIN", "net": 85.07, "city": "San Antonio", "price": 27, "edge": 12, "fired_hour": 13, "src": "Y-T", "sig_gate": true}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.86, "city": "New Orleans", "price": 23, "edge": 21, "fired_hour": 14, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.89, "city": "Chicago", "price": 21, "edge": 10, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9, "city": "Los Angeles", "price": 16, "edge": 31, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.92, "city": "Austin", "price": 8, "edge": 32, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "WIN", "net": 100.14, "city": "Boston", "price": 25, "edge": 10, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.79, "city": "Dallas", "price": 28, "edge": 15, "fired_hour": 21, "src": "Y-T", "sig_gate": false}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.84, "city": "Houston", "price": 28, "edge": 17, "fired_hour": 19, "src": "Y-T", "sig_gate": false}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.92, "city": "Oklahoma City", "price": 11, "edge": 36, "fired_hour": 13, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.91, "city": "San Francisco", "price": 23, "edge": 23, "fired_hour": 11, "src": "Y-T", "sig_gate": false}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.89, "city": "New Orleans", "price": 23, "edge": 23, "fired_hour": 23, "src": "Y-T", "sig_gate": false}, {"zone": "EVENING", "outcome": "WIN", "net": 108.13, "city": "New York", "price": 24, "edge": 20, "fired_hour": 16, "src": "Y-T", "sig_gate": true}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.84, "city": "Chicago", "price": 18, "edge": 29, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.98, "city": "Los Angeles", "price": 8, "edge": 39, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.7, "city": "Minneapolis", "price": 35, "edge": 10, "fired_hour": 16, "src": "Y-T", "sig_gate": true}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.94, "city": "Washington DC", "price": 11, "edge": 18, "fired_hour": 21, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.78, "city": "Oklahoma City", "price": 33, "edge": 11, "fired_hour": 11, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "WIN", "net": 61.09, "city": "San Francisco", "price": 31, "edge": 15, "fired_hour": 11, "src": "Y-T", "sig_gate": false}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.93, "city": "New Orleans", "price": 9, "edge": 38, "fired_hour": 14, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.98, "city": "Chicago", "price": 25, "edge": 23, "fired_hour": 10, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.96, "city": "Los Angeles", "price": 14, "edge": 33, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.78, "city": "Boston", "price": 18, "edge": 11, "fired_hour": 10, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9, "city": "Washington DC", "price": 6, "edge": 36, "fired_hour": 11, "src": "Y-T", "sig_gate": false}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.93, "city": "San Francisco", "price": 34, "edge": 10, "fired_hour": 23, "src": "Y-T", "sig_gate": false}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.79, "city": "San Antonio", "price": 28, "edge": 16, "fired_hour": 14, "src": "Y-T", "sig_gate": true}, {"zone": "EVENING", "outcome": "WIN", "net": 85.05, "city": "New Orleans", "price": 27, "edge": 18, "fired_hour": 16, "src": "Y-T", "sig_gate": true}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.95, "city": "Los Angeles", "price": 19, "edge": 28, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9, "city": "Austin", "price": 7, "edge": 22, "fired_hour": 10, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.78, "city": "Atlanta", "price": 28, "edge": 14, "fired_hour": 10, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "WIN", "net": 177.16, "city": "Boston", "price": 18, "edge": 28, "fired_hour": 10, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.92, "city": "Dallas", "price": 22, "edge": 14, "fired_hour": 10, "src": "Y-T", "sig_gate": false}, {"zone": "EVENING", "outcome": "WIN", "net": 85.1, "city": "Oklahoma City", "price": 27, "edge": 11, "fired_hour": 21, "src": "Y-T", "sig_gate": false}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.9, "city": "Austin", "price": 26, "edge": 20, "fired_hour": 17, "src": "Y-T", "sig_gate": true}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.76, "city": "Atlanta", "price": 28, "edge": 12, "fired_hour": 19, "src": "Y-T", "sig_gate": true}, {"zone": "OPEN", "outcome": "WIN", "net": 194.04, "city": "Boston", "price": 17, "edge": 15, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.84, "city": "Dallas", "price": 24, "edge": 17, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "MIDDAY", "outcome": "WIN", "net": 100.0, "city": "Houston", "price": 25, "edge": 18, "fired_hour": 12, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "WIN", "net": 61.11, "city": "San Antonio", "price": 31, "edge": 15, "fired_hour": 11, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.84, "city": "Miami", "price": 28, "edge": 15, "fired_hour": 9, "src": "Y-T", "sig_gate": false}, {"zone": "MIDDAY", "outcome": "WIN", "net": 61.09, "city": "Philadelphia", "price": 31, "edge": 14, "fired_hour": 12, "src": "Y-T", "sig_gate": true}, {"zone": "EVENING", "outcome": "WIN", "net": 66.2, "city": "Dallas", "price": 30, "edge": 13, "fired_hour": 18, "src": "Y-T", "sig_gate": true}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.68, "city": "Las Vegas", "price": 35, "edge": 11, "fired_hour": 11, "src": "Y-T", "sig_gate": false}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.9, "city": "New Orleans", "price": 26, "edge": 20, "fired_hour": 11, "src": "Y-T", "sig_gate": false}, {"zone": "MIDDAY", "outcome": "WIN", "net": 78.18, "city": "Philadelphia", "price": 28, "edge": 18, "fired_hour": 14, "src": "Y-T", "sig_gate": true}, {"zone": "EVENING", "outcome": "LOSS", "net": -99.86, "city": "Austin", "price": 29, "edge": 18, "fired_hour": 16, "src": "Y-T", "sig_gate": true}, {"zone": "MIDDAY", "outcome": "WIN", "net": 78.24, "city": "Denver", "price": 28, "edge": 14, "fired_hour": 14, "src": "Y-T", "sig_gate": true}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.91, "city": "Atlanta", "price": 23, "edge": 20, "fired_hour": 13, "src": "Y-T", "sig_gate": true}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.91, "city": "Oklahoma City", "price": 31, "edge": 10, "fired_hour": 14, "src": "Y-T", "sig_gate": true}, {"zone": "OPEN", "outcome": "LOSS", "net": -99.89, "city": "Philadelphia", "price": 31, "edge": 16, "fired_hour": 11, "src": "Y-T", "sig_gate": false}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.89, "city": "Seattle", "price": 31, "edge": 16, "fired_hour": 23, "src": "Y-T", "sig_gate": false}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.98, "city": "Oklahoma City", "price": 25, "edge": 20, "fired_hour": 12, "src": "Y-T", "sig_gate": true}, {"zone": "OVERNIGHT", "outcome": "LOSS", "net": -99.7, "city": "San Antonio", "price": 35, "edge": 10, "fired_hour": 23, "src": "Y-T", "sig_gate": false}, {"zone": "MIDDAY", "outcome": "LOSS", "net": -99.86, "city": "New Orleans", "price": 29, "edge": 18, "fired_hour": 13, "src": "Y-T", "sig_gate": true}];
+
+// ── Gate criteria (mirrors full dashboard) ─────────────────────────────────
+// GATE_HOURS: noon-10pm CDT (12-22). GATE_DAYS: all 7 days (Sun restored v4.27).
+const GATE_HOURS = new Set([12,13,14,15,16,17,18,19,20,21,22]);
+const MIN_PRICE  = 22;   // ¢
+const MAX_EDGE   = 20;   // %
+
+// T-T signals pass gate if city P&L > 0 (no signal-quality gate on T-T)
+// Y-T signals need: hour + price + edge + city P&L > 0
+// City P&L gate: city net >= 0 from CITY_STATS
+function isCityGatePass(city) {
+  const cd = (CITY_STATS.cities || {})[city];
+  if (!cd) return false;
+  return (cd.net_pnl || 0) > 0;
+}
+
+function isGatePass(p) {
+  // T-T follow-ons: city gate only (no signal-quality gate per rulebook)
+  if (p.src === 'T-T') return isCityGatePass(p.city);
+  // Use pre-computed sig_gate flag if available (from generate_mobile.py)
+  if (p.sig_gate !== undefined) return p.sig_gate && isCityGatePass(p.city);
+  // Fallback: compute from individual fields
+  if (!isCityGatePass(p.city)) return false;
+  if ((p.price || 0) < MIN_PRICE) return false;
+  if ((p.edge  || 0) > MAX_EDGE)  return false;
+  if (p.fired_hour != null && !GATE_HOURS.has(p.fired_hour)) return false;
+  return true;
+}
+
+// Gate for CB4 cell (city-level gate only — cells don't carry signal fields)
+function isCityGate(city) { return isCityGatePass(city); }
 
 // ── State ──────────────────────────────────────────────────────────────────
-let cbZone = 'all', txZone = 'all';
+let cbZone = 'all', txZone = 'all', s3Zone = 'all', s4Zone = 'all';
 
 // ── Init ───────────────────────────────────────────────────────────────────
-// Rendering triggered by PIN gate (see checkPin())
-// Auto-render only if already authenticated
 document.addEventListener('DOMContentLoaded', () => {
   if (localStorage.getItem('kalshi_auth') === PIN_HASH) {
-    renderStats(); renderCB(); renderTX(); renderS3(); renderS4();
+    renderAll();
   }
-
-  // ── Auto-refresh every 6 minutes with cache-buster ──────────────────────
-  // GitHub Pages CDN caches aggressively. Adding a timestamp query param
-  // forces the CDN to fetch the latest version rather than serving stale HTML.
-  // 6 minutes ensures we always show data from the most recent pipeline run.
   setInterval(() => {
-    const url = window.location.pathname + '?t=' + Date.now();
-    window.location.replace(url);
+    window.location.replace(window.location.pathname + '?t=' + Date.now());
   }, 6 * 60 * 1000);
 });
 
-// ── Stats ──────────────────────────────────────────────────────────────────
+function renderAll() {
+  renderAccount();
+  renderStats();
+  renderCB();
+  renderTX();
+  renderS3();
+  renderS4();
+}
+
+// ── Kalshi account section ─────────────────────────────────────────────────
+function renderAccount() {
+  document.getElementById('upd-time').textContent = 'Updated ' + (STATS.updated || '—');
+  const cash  = STATS.kalshi_cash  != null ? '$' + STATS.kalshi_cash.toFixed(2)  : '—';
+  const port  = STATS.kalshi_port  != null ? '$' + STATS.kalshi_port.toFixed(2)  : '—';
+  const bank  = STATS.bank         != null ? '$' + STATS.bank.toFixed(2)         : '—';
+  document.getElementById('acct-cash').textContent      = cash;
+  document.getElementById('acct-portfolio').textContent = port;
+  document.getElementById('acct-bank').textContent      = bank;
+}
+
+// ── Stats bar — always shows GATE stats ───────────────────────────────────
 function renderStats() {
-  document.getElementById('upd-time').textContent = 'Updated ' + STATS.updated;
-  // Compute stats for current cbZone filter using ALL_SETTLED data
-  let wins = 0, losses = 0, netPnl = 0;
-  if (cbZone === 'all') {
-    wins = STATS.wins; losses = STATS.losses; netPnl = STATS.net_pnl;
-  } else {
-    // Filter settled trades by zone using ALL_SETTLED baked-in array
-    (ALL_SETTLED || []).forEach(t => {
-      if (t.zone.toLowerCase() !== cbZone) return;
-      if (t.outcome === 'WIN') { wins++; netPnl += t.net; }
-      else { losses++; netPnl += t.net; }
-    });
-  }
-  const total = wins + losses;
-  const wr = total > 0 ? Math.round(wins / total * 100) : null;
+  const gatePeaks = ALL_SETTLED.filter(t => isGatePass(t));
+  let wins = 0, losses = 0, pend = 0, net = 0;
+  PEAKS.forEach(p => { if (p.outcome === 'PENDING') pend++; });
+  gatePeaks.forEach(t => {
+    if (t.outcome === 'WIN')  { wins++; net += (t.net || 0); }
+    if (t.outcome === 'LOSS') { losses++; net += (t.net || 0); }
+  });
+  const tot = wins + losses;
+  const wr  = tot > 0 ? Math.round(wins/tot*100) : null;
   const wrEl = document.getElementById('s-wr');
   wrEl.textContent = wr != null ? wr + '%' : '—';
-  wrEl.className = 'stat-val ' + (wr >= 75 ? 'green' : wr >= 50 ? 'yellow' : wr != null ? 'red' : 'muted');
+  wrEl.className   = 'stat-val ' + (wr >= 75 ? 'green' : wr >= 50 ? 'yellow' : wr != null ? 'red' : 'muted');
   document.getElementById('s-wl').textContent = wins + 'W / ' + losses + 'L';
   const pnlEl = document.getElementById('s-pnl');
-  pnlEl.textContent = (netPnl >= 0 ? '+' : '') + '$' + Math.abs(netPnl).toFixed(2);
-  pnlEl.className = 'stat-val ' + (netPnl >= 0 ? 'green' : 'red');
-  const bank = 1000 + netPnl;
-  document.getElementById('s-bank').textContent = '$' + bank.toFixed(2);
+  pnlEl.textContent = (net >= 0 ? '+$' : '-$') + Math.abs(net).toFixed(2);
+  pnlEl.className   = 'stat-val ' + (net >= 0 ? 'green' : 'red');
+  const pendEl = document.getElementById('s-pend');
+  pendEl.textContent = pend;
+  pendEl.className   = 'stat-val ' + (pend > 0 ? 'blue' : 'muted');
 }
 
 // ── Checkerboard ───────────────────────────────────────────────────────────
@@ -385,66 +440,59 @@ function setCBZone(z, btn) {
   cbZone = z;
   document.querySelectorAll('#cb-pills .pill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  document.getElementById('cb-gate-label').style.display = z === 'gate' ? '' : 'none';
   renderCB();
-  renderStats();
 }
 
 function renderCB() {
-  const head = document.getElementById('cb-head');
-  const body = document.getElementById('cb-body');
+  const head    = document.getElementById('cb-head');
+  const body    = document.getElementById('cb-body');
   const statsEl = document.getElementById('cb-stats');
 
-  // 4-column headers: TMRW | T-T | Y-T | YDAY
   head.innerHTML = '<th class="city-col">CITY</th>' +
-    '<th class="data-col" title="Tomorrow-signal settling tomorrow">TMRW</th>' +
-    '<th class="tt-col" title="Today-signal settling today">T‑T</th>' +
-    '<th class="yt-col" title="Yesterday-signal settling today">Y‑T</th>' +
-    '<th class="data-col" title="Yesterday settled">YDAY</th>';
+    '<th class="data-col" title="Pending tomorrow signal">TMRW</th>' +
+    '<th class="tt-col"   title="T-T follow-on settling today">T‑T</th>' +
+    '<th class="yt-col"   title="Y-T signal settling today">Y‑T</th>' +
+    '<th class="data-col" title="Settled yesterday">YDAY</th>';
 
-  const cols = ['tmrw','tt','yt','yday'];
-  const cities = CB4.cities || [];
-  const abbr = {
-    'Atlanta':'ATL','Austin':'AUS','Boston':'BOS','Chicago':'CHI',
-    'Dallas':'DAL','Denver':'DEN','Houston':'HOU','Las Vegas':'LAS',
-    'Los Angeles':'LAX','Miami':'MIA','Minneapolis':'MSP','New Orleans':'MSY',
-    'New York':'NYC','Oklahoma City':'OKC','Philadelphia':'PHL','Phoenix':'PHX',
-    'San Antonio':'SAT','San Francisco':'SFO','Seattle':'SEA',
-    'Washington DC':'DCA',
-  };
-  let wins = 0, losses = 0, pending = 0, rows = '';
+  const cols    = ['tmrw','tt','yt','yday'];
+  const cities  = CB4.cities || [];
+  let wins=0, losses=0, pending=0, rows='';
 
   function makeCell(col, city) {
     const d = (CB4[col] || {})[city];
     if (!d) return '<td><div class="cell cell-none">·</div></td>';
-    const matchZone = cbZone === 'all' || d.zone.toLowerCase() === cbZone;
-    const zoneClass = d.zone === 'MIDDAY' ? 'cell-mid' : d.zone === 'OPEN' ? 'cell-opn' : 'cell-evn';
-    let cls = '', lbl = '';
-    if (d.outcome === 'WIN')       { cls = 'cell-win '     + zoneClass; lbl = '✓'; wins++; }
-    else if (d.outcome === 'LOSS') { cls = 'cell-loss '    + zoneClass; lbl = '✗'; losses++; }
-    else                           { cls = 'cell-pending ' + zoneClass; lbl = '⊕'; pending++; }
-    if (!matchZone) cls += ' dim';
+    const gatePass = isCityGate(city);
+    // Under GATE filter: dim non-gate cities
+    const isDim = cbZone === 'gate' && !gatePass;
+    if (cbZone === 'gate' && !gatePass) {
+      return '<td><div class="cell cell-' + (d.outcome === 'WIN' ? 'win' : d.outcome === 'LOSS' ? 'loss' : 'pending') + ' dim" title="' + city + ' · city not gate-qualified">·</div></td>';
+    }
+    let cls='', lbl='';
+    if (d.outcome === 'WIN')  { cls = 'cell-win';     lbl = '✓'; if(!isDim) wins++; }
+    else if (d.outcome === 'LOSS') { cls = 'cell-loss'; lbl = '✗'; if(!isDim) losses++; }
+    else                      { cls = 'cell-pending'; lbl = '⊕'; if(!isDim) pending++; }
     return '<td><div class="cell ' + cls + '" title="' + city + ' [' + d.zone + '] ' + d.bracket + '">' + lbl + '</div></td>';
   }
 
   cities.forEach(city => {
-    const hasCells = cols.some(col => {
-      const d = (CB4[col] || {})[city];
-      return d && (cbZone === 'all' || d.zone.toLowerCase() === cbZone);
-    });
+    const hasCells = cols.some(col => !!(CB4[col] || {})[city]);
     if (!hasCells) return;
+    if (cbZone === 'gate' && !isCityGate(city)) return; // hide non-gate cities from GATE board
     rows += '<tr><td class="city-name">' + city + '</td>' +
       cols.map(col => makeCell(col, city)).join('') + '</tr>';
   });
 
-  body.innerHTML = rows || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;font-size:10px;">No signals for selected zone</td></tr>';
+  body.innerHTML = rows || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:12px;">No signals</td></tr>';
   const tot = wins + losses;
-  const wr = tot > 0 ? Math.round(wins/tot*100) + '%' : '—';
+  const wr  = tot > 0 ? Math.round(wins/tot*100) + '%' : '—';
   statsEl.innerHTML =
-    '<span><span class="cb-stat-val ' + (wins>losses?'green':'muted') + '">' + wins + 'W / ' + losses + 'L</span> settled</span>' +
+    '<span><span class="cb-stat-val ' + (wins>=losses?'green':'muted') + '">' + wins + 'W / ' + losses + 'L</span>' + (cbZone==='gate'?' (gate)':'') + '</span>' +
     '<span><span class="cb-stat-val blue">' + pending + '</span> pending</span>' +
-    '<span>Win rate: <span class="cb-stat-val ' + (parseInt(wr)>=75?'green':parseInt(wr)>=50?'yellow':'red') + '">' + wr + '</span></span>';
+    '<span>WR: <span class="cb-stat-val ' + (parseInt(wr)>=75?'green':parseInt(wr)>=50?'yellow':'red') + '">' + wr + '</span></span>';
 }
 
+// ── Live Transactions ──────────────────────────────────────────────────────
 function setTXZone(z, btn) {
   txZone = z;
   document.querySelectorAll('#tx-pills .pill').forEach(b => b.classList.remove('active'));
@@ -453,88 +501,60 @@ function setTXZone(z, btn) {
 }
 
 function renderTX() {
-  const list = document.getElementById('tx-list');
-  const filtered = txZone === 'all' ? PEAKS : PEAKS.filter(p => p.zone.toLowerCase() === txZone);
+  const list     = document.getElementById('tx-list');
+  const filtered = txZone === 'gate'
+    ? PEAKS.filter(p => isGatePass(p))
+    : PEAKS;
   if (!filtered.length) {
-    list.innerHTML = '<div class="empty">No active transactions for selected zone</div>';
+    list.innerHTML = '<div class="empty">No transactions' + (txZone==='gate'?' matching gate criteria':'') + '</div>';
     return;
   }
 
-  // Group labels
-  const groupLabels = {1:'TODAY SIGNALS',2:'TOMORROW PENDING',3:'TODAY SETTLED',4:'YESTERDAY SETTLED'};
-  let lastGroup = null;
-  let html = '';
+  const groupLabels = {1:'📡 LIVE — Tomorrow Pending',2:'🔁 Today Signals',3:'✓ Today Settled',4:'Yesterday Settled'};
+  let lastGroup = null, html = '';
 
   filtered.forEach(p => {
-    const grp = p.tx_group || 3;
-
-    // Group header divider
+    const grp     = p.tx_group || 3;
     if (grp !== lastGroup) {
-      html += '<div class="tx-group-header">' + (groupLabels[grp] || '') + '</div>';
+      html += '<div class="tx-group-header">' + (groupLabels[grp] || grp) + '</div>';
       lastGroup = grp;
     }
-
-    const outcome = p.outcome || 'PENDING';
-    const outCls  = outcome === 'WIN' ? 'outcome-win' : outcome === 'LOSS' ? 'outcome-loss' : 'outcome-pending';
-    const zclass  = p.zone.toLowerCase();
-    const badgeCls = 'badge-' + zclass;
-
-    // Settle label
-    const settleLbl = (p.tx_source === 'today' || p.is_today) ? 'TODAY' : ('→05-26');
-
-    // Zone bar: EVENING only gets DO NOT TRADE
-    const dnt = p.zone === 'EVENING'
-      ? '<div class="do-not-trade-bar">⛔ DO NOT TRADE · EVENING ZONE · market closing</div>'
-      : '';
-
-    // Outcome bar for settled signals
-    const settledBar = outcome === 'WIN'
-      ? '<div class="do-not-trade-bar" style="background:rgba(0,200,100,0.12);color:var(--green);">✓ WIN · SETTLED</div>'
-      : outcome === 'LOSS'
-        ? '<div class="do-not-trade-bar" style="background:rgba(200,50,50,0.12);color:var(--red);">✗ LOSS · SETTLED</div>'
-        : '';
-
+    const outcome  = p.outcome || 'PENDING';
+    const outCls   = outcome === 'WIN' ? 'outcome-win' : outcome === 'LOSS' ? 'outcome-loss' : 'outcome-pending';
+    const srcLower = (p.src || 'tmrw').toLowerCase().replace('-','');
+    const typeBadge = p.src === 'T-T'  ? '<span class="type-badge badge-tt">T-T</span>'  :
+                      p.src === 'Y-T'  ? '<span class="type-badge badge-yt">Y-T</span>'  :
+                      p.src === 'YDAY' ? '<span class="type-badge badge-yday">YDAY</span>' :
+                                         '<span class="type-badge badge-tmrw">TMRW</span>';
+    const settleLbl = (p.tx_source === 'today' || p.is_today) ? 'TODAY' : (p.target ? '→' + p.target.slice(5) : '');
+    const gateOk   = isGatePass(p);
+    const gateTag  = !gateOk ? '<span style="font-size:8px;color:var(--muted);margin-left:4px;">·dim</span>' : '';
+    const outcomeBar = outcome === 'WIN'  ? '<div class="outcome-bar win">✓ WIN · SETTLED</div>'
+                     : outcome === 'LOSS' ? '<div class="outcome-bar loss">✗ LOSS · SETTLED</div>'
+                     : '';
     const recentBadge = p.recently_fired ? ' <span style="font-size:8px;color:var(--green);">● NEW</span>' : '';
-    const sigPri = '▲ ' + p.bracket + (p.price != null ? ' · ' + p.price + '¢' : '');
-    const sigAdj = p.adj
-      ? '<div class="sig-line adj">▲ ' + p.adj + (p.adj_price != null ? ' · ' + p.adj_price + '¢' : '') + '</div>'
-      : '';
-    // Determine which bracket won to highlight it
-    const adjWon = p.outcome === 'WIN' && p.win_adjacent != null && p.win_adjacent > p.win_primary;
-    const priWon = p.outcome === 'WIN' && !adjWon;
-    const priLbl = priWon ? 'WIN (pri) ✓' : 'WIN (pri)';
-    const priCls = priWon ? 'green' : (p.outcome === 'WIN' ? 'muted' : 'green');
-    const winAdj = p.win_adjacent != null
-      ? '<div class="fin-box"><div class="fin-lbl">' + (adjWon ? 'ADJ WIN ✓' : 'ADJ WIN') + '</div>'
-        + '<div class="fin-val ' + (adjWon ? 'blue' : (p.outcome === 'WIN' ? 'muted' : 'blue')) + '">+$' + p.win_adjacent.toFixed(2) + '</div></div>'
+    const sigPri   = '▲ ' + p.bracket + (p.price != null ? ' · ' + p.price + '¢' : '');
+    const sigAdj   = p.adj ? '<div class="sig-line adj">▲ ' + p.adj + (p.adj_price != null ? ' · ' + p.adj_price + '¢' : '') + '</div>' : '';
+    const adjWon   = p.outcome === 'WIN' && p.win_adjacent != null && p.win_adjacent > p.win_primary;
+    const winAdjBox = p.win_adjacent != null
+      ? '<div class="fin-box"><div class="fin-lbl">' + (adjWon?'ADJ WIN ✓':'ADJ WIN') + '</div><div class="fin-val ' + (adjWon?'blue':'muted') + '">+$' + p.win_adjacent.toFixed(2) + '</div></div>'
       : '<div class="fin-box"><div class="fin-lbl">ADJ WIN</div><div class="fin-val muted">—</div></div>';
-    const srcLabel = p.tx_source === 'today' ? 'TODAY' : 'TMRW';
-    const metaLine = srcLabel + ' · Locked ' + p.fired_str + (p.edge != null ? ' · +' + p.edge + '% edge' : '');
-    // Top Kalshi market bracket line
-    const topMktLine = p.top_mkt
-      ? '<div class="tx-meta" style="color:var(--muted2);margin-top:2px;">► Mkt: <span style="color:var(--text);">' + p.top_mkt + '</span>' + (p.top_mkt_pct != null ? ' · ' + p.top_mkt_pct + '¢' : '') + (p.intraday_high != null && (p.outcome === 'WIN' || p.outcome === 'LOSS') ? ' · Actual: <span style="color:var(--yellow);">' + p.intraday_high + '°F</span>' : '') + '</div>'
-      : '';
+    const actualHigh = p.intraday_high != null && outcome !== 'PENDING'
+      ? ' · Actual <span style="color:var(--yellow);">' + p.intraday_high + '°F</span>' : '';
+    const metaLine = (p.src==='T-T'?'T-T from Y-T':'TMRW') + ' · ' + p.fired_str + (p.edge!=null?' · +'+p.edge+'% edge':'') + actualHigh;
 
     html += '<div class="tx-card ' + outCls + '">' +
       '<div class="tx-top">' +
-        '<div class="tx-city">' + p.city + recentBadge + '</div>' +
-        '<div class="tx-badges">' +
-          '<span class="zone-badge ' + badgeCls + '">' + p.zone + '</span>' +
-          '<span class="settle-badge">' + settleLbl + '</span>' +
-        '</div>' +
+        '<div class="tx-city">' + p.city + recentBadge + gateTag + '</div>' +
+        '<div class="tx-badges">' + typeBadge + '<span class="settle-badge">' + settleLbl + '</span></div>' +
       '</div>' +
-      dnt +
-      settledBar +
-      topMktLine +
+      outcomeBar +
       '<div class="tx-meta">' + metaLine + '</div>' +
-      '<div class="tx-signals">' +
-        '<div class="sig-line">' + sigPri + '</div>' +
-        sigAdj +
-      '</div>' +
+      '<div class="tx-signals"><div class="sig-line">' + sigPri + '</div>' + sigAdj + '</div>' +
       '<div class="tx-fin">' +
         '<div class="fin-box"><div class="fin-lbl">SPENT</div><div class="fin-val red">-$' + p.spent.toFixed(2) + '</div></div>' +
-        '<div class="fin-box"><div class="fin-lbl">' + priLbl + '</div><div class="fin-val ' + priCls + '">+$' + p.win_primary.toFixed(2) + '</div></div>' +
-        winAdj +
+        '<div class="fin-box"><div class="fin-lbl">' + (adjWon?'PRI WIN':'WIN (pri)') + '</div><div class="fin-val ' + (adjWon?'muted':'green') + '">+$' + p.win_primary.toFixed(2) + '</div></div>' +
+        winAdjBox +
       '</div>' +
     '</div>';
   });
@@ -542,41 +562,7 @@ function renderTX() {
   list.innerHTML = html;
 }
 
-  // ── PIN gate ───────────────────────────────────────────────────────────────
-  const PIN_HASH = 'wh62';
-  function hashPin(pin) {
-    let h = 0;
-    for (let i = 0; i < pin.length; i++) {
-      h = Math.imul(31, h) + pin.charCodeAt(i) | 0;
-    }
-    return Math.abs(h).toString(36);
-  }
-  function checkPin() {
-    const val = document.getElementById('pin-input').value;
-    if (hashPin(val) === PIN_HASH) {
-      document.getElementById('gate').style.display = 'none';
-      localStorage.setItem('kalshi_auth', PIN_HASH);
-      renderStats(); renderCB(); renderTX(); renderS3(); renderS4();
-    } else {
-      const err = document.getElementById('pin-err');
-      err.textContent = 'Incorrect PIN';
-      document.getElementById('pin-input').value = '';
-      setTimeout(() => err.textContent = '', 2000);
-    }
-  }
-  document.getElementById('pin-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') checkPin();
-  });
-  // Auto-unlock if already authenticated this session
-  if (localStorage.getItem('kalshi_auth') === PIN_HASH) {
-    document.getElementById('gate').style.display = 'none';
-  } else {
-    // Don't render data until PIN is entered
-    document.removeEventListener('DOMContentLoaded', null);
-  }
-
-
-// ── Section 3: Per-city win rates (10-day) ────────────────────────────────
+// ── Per-City P&L ──────────────────────────────────────────────────────────
 let s3Zone = 'all';
 function toggleSection3() {
   const body = document.getElementById('section3-body');
@@ -593,104 +579,71 @@ function setS3Zone(z, btn) {
   renderS3();
 }
 function renderS3() {
-  const tbody = document.getElementById('s3-tbody');
+  const tbody   = document.getElementById('s3-tbody');
   const summary = document.getElementById('s3-summary');
   if (!tbody) return;
 
-  // T-T signals (tx_source=today) count as OPEN for zone filtering
-  function peakZone(p) {
-    if (p.tx_source === 'today' && (p.zone === 'OVERNIGHT' || !p.zone)) return 'open';
-    return (p.zone || '').toLowerCase();
-  }
+  const filtered = s3Zone === 'gate'
+    ? ALL_SETTLED.filter(t => isGatePass(t))
+    : ALL_SETTLED;
 
-  // Use pre-computed CITY_STATS from generate_mobile.py (May 23+ cutoff)
-  const cityData = CITY_STATS.cities || {};
-  const priWinsTotal = CITY_STATS.pri_wins || 0;
-  const adjWinsTotal = CITY_STATS.adj_wins || 0;
+  const stats = {};
+  filtered.forEach(t => {
+    if (t.outcome !== 'WIN' && t.outcome !== 'LOSS') return;
+    if (!stats[t.city]) stats[t.city] = {w:0,l:0,net:0};
+    const s = stats[t.city];
+    if (t.outcome === 'WIN') { s.w++; s.net += (t.net || 0); }
+    else { s.l++; s.net += (t.net || 0); }
+    s.net = Math.round(s.net*100)/100;
+  });
 
-  // Pending peaks from live PEAKS array
   const pendMap = {};
   PEAKS.filter(p => p.outcome === 'PENDING').forEach(p => {
-    pendMap[p.city] = (pendMap[p.city] || 0) + 1;
+    pendMap[p.city] = (pendMap[p.city]||0) + 1;
   });
 
-  // Zone-filtered settled stats from PEAKS
-  const stats = {};
-  PEAKS.filter(p => {
-    if (p.outcome !== 'WIN' && p.outcome !== 'LOSS') return false;
-    if (s3Zone !== 'all' && peakZone(p) !== s3Zone) return false;
-    return true;
-  }).forEach(p => {
-    if (!stats[p.city]) stats[p.city] = {w:0,l:0,net:0};
-    const s = stats[p.city];
-    if (p.outcome === 'WIN') { s.w++; s.net += (p.win_primary || 0); }
-    else { s.l++; s.net -= (p.spent || 0); }
-    s.net = Math.round(s.net * 100) / 100;
-  });
-
-  const cities = [...new Set([
-    ...Object.keys(stats),
-    ...Object.keys(pendMap),
-    ...Object.keys(cityData)
-  ])].sort();
-
-  if (!cities.length) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:12px;">No data for selected zone</td></tr>';
-    summary.textContent = '';
-    return;
-  }
-
-  let totW=0, totL=0, totNet=0;
+  const cities = [...new Set([...Object.keys(stats),...Object.keys(pendMap)])].sort();
+  let totW=0,totL=0,totNet=0;
   const rows = cities.map(city => {
-    const s   = stats[city]    || {w:0,l:0,net:0};
-    const cd  = cityData[city] || {n:0};
+    const s    = stats[city] || {w:0,l:0,net:0};
     const pend = pendMap[city] || 0;
-    if (s.w + s.l === 0 && pend === 0) return null;
-    totW += s.w; totL += s.l; totNet += s.net;
-    const tot = s.w + s.l;
-    const wr = tot > 0 ? Math.round(s.w/tot*100) : null;
-    const wrStr = wr !== null ? wr + '%' : '—';
-    const wrCol = wr === null ? 'var(--muted)' : wr >= 75 ? 'var(--green)' : wr >= 50 ? 'var(--yellow)' : 'var(--red)';
-    const netStr = s.net > 0 ? '+$'+s.net.toFixed(2) : s.net < 0 ? '-$'+Math.abs(s.net).toFixed(2) : '—';
-    const netCol = s.net > 0 ? 'var(--green)' : s.net < 0 ? 'var(--red)' : 'var(--muted)';
-    const wlStr = s.w + 'W/' + s.l + 'L' + (pend ? '/'+pend+'P' : '');
-    const n = cd.n || tot;
+    if (s.w+s.l===0 && pend===0) return null;
+    totW+=s.w; totL+=s.l; totNet+=s.net;
+    const tot   = s.w+s.l;
+    const wr    = tot>0 ? Math.round(s.w/tot*100) : null;
+    const wrStr = wr!=null ? wr+'%' : '—';
+    const wrCol = wr==null?'var(--muted)':wr>=75?'var(--green)':wr>=50?'var(--yellow)':'var(--red)';
+    const netStr = s.net>0?'+$'+s.net.toFixed(2):s.net<0?'-$'+Math.abs(s.net).toFixed(2):'—';
+    const netCol = s.net>0?'var(--green)':s.net<0?'var(--red)':'var(--muted)';
+    const wlStr  = s.w+'W/'+s.l+'L'+(pend?'/'+pend+'P':'');
+    const gateIcon = isCityGatePass(city) ? '<span style="color:var(--green);">✓</span>' : '<span style="color:var(--muted);">·</span>';
     return `<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
       <td style="padding:4px 4px;font-weight:600;">${city}</td>
       <td style="padding:4px 4px;text-align:center;color:${wrCol};">${wrStr}</td>
       <td style="padding:4px 4px;text-align:center;color:var(--muted2);font-size:8px;">${wlStr}</td>
       <td style="padding:4px 4px;text-align:right;color:${netCol};">${netStr}</td>
-      <td style="padding:4px 4px;text-align:center;color:var(--muted);">${n || '—'}</td>
+      <td style="padding:4px 4px;text-align:center;">${gateIcon}</td>
     </tr>`;
   }).filter(Boolean);
 
-  tbody.innerHTML = rows.length
-    ? rows.join('')
-    : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:12px;">No data for selected zone</td></tr>';
+  tbody.innerHTML = rows.length ? rows.join('')
+    : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:12px;">No data</td></tr>';
 
-  const totTot = totW + totL;
-  const totWR = totTot > 0 ? Math.round(totW/totTot*100) + '%' : '—';
-  const totNetStr = totNet > 0 ? '+$'+totNet.toFixed(2) : totNet < 0 ? '-$'+Math.abs(totNet).toFixed(2) : '$0';
+  const totTot = totW+totL;
+  const totWR  = totTot>0 ? Math.round(totW/totTot*100)+'%' : '—';
+  const totNetStr = totNet>0?'+$'+totNet.toFixed(2):totNet<0?'-$'+Math.abs(totNet).toFixed(2):'$0';
   summary.textContent = totWR + ' · ' + totNetStr;
 
-  // PRI/ADJ summary line
   const priAdjEl = document.getElementById('s3-pri-adj');
   if (priAdjEl) {
-    const tot2 = priWinsTotal + adjWinsTotal;
-    if (tot2 > 0) {
-      const priPct = Math.round(priWinsTotal/tot2*100);
-      const adjPct = Math.round(adjWinsTotal/tot2*100);
-      priAdjEl.innerHTML =
-        'Wins · <span style="color:var(--blue);">' + priWinsTotal + 'P (' + priPct + '%)</span> primary'
-        + '  ·  <span style="color:var(--green);">' + adjWinsTotal + 'A (' + adjPct + '%)</span> adjacent';
-    } else {
-      priAdjEl.textContent = '';
-    }
+    const pw = CITY_STATS.pri_wins||0, aw = CITY_STATS.adj_wins||0, tw = pw+aw;
+    priAdjEl.innerHTML = tw>0
+      ? 'Wins · <span style="color:var(--blue);">' + pw + 'P (' + Math.round(pw/tw*100) + '%)</span> pri · <span style="color:var(--green);">' + aw + 'A (' + Math.round(aw/tw*100) + '%)</span> adj'
+      : '';
   }
 }
 
-// ── Section 4: 3-day transaction log ─────────────────────────────────────
-let s4Zone = 'all';
+// ── 3-Day Transaction Log ──────────────────────────────────────────────────
 function toggleSection4() {
   const body = document.getElementById('section4-body');
   const chev = document.getElementById('s4-chevron');
@@ -706,74 +659,125 @@ function setS4Zone(z, btn) {
   renderS4();
 }
 function renderS4() {
-  const tbody = document.getElementById('s4-tbody');
+  const tbody   = document.getElementById('s4-tbody');
   const statsEl = document.getElementById('s4-stats');
   if (!tbody) return;
 
-  function txZone(t) {
-    if (t.src === 'T-T') return 'open';
-    return (t.zone || '').toLowerCase();
-  }
+  const filtered = s4Zone === 'gate'
+    ? THREE_DAY_TX.filter(t => isGatePass(t))
+    : THREE_DAY_TX;
 
-  const filtered = s4Zone === 'all'
-    ? THREE_DAY_TX
-    : THREE_DAY_TX.filter(t => txZone(t) === s4Zone || (s4Zone === 'open' && t.src === 'T-T'));
-
-  // Sort: pending TMRW first, then T-T, Y-T, YDAY — alphabetical within group
+  // Sort: TMRW first, then T-T, Y-T, YDAY — alpha within group
   const grpOrder = {'TMRW':1,'T-T':2,'Y-T':3,'YDAY':4};
   const sorted = [...filtered].sort((a,b) => {
-    const ga = grpOrder[a.src] || 5, gb = grpOrder[b.src] || 5;
-    if (ga !== gb) return ga - gb;
-    return a.city < b.city ? -1 : 1;
+    const ga = grpOrder[a.src]||5, gb = grpOrder[b.src]||5;
+    return ga!==gb ? ga-gb : a.city<b.city?-1:1;
   });
 
-  let wins=0, losses=0, pend=0, netTot=0;
-  let lastSrc = null;
-  const rows = sorted.map(t => {
+  let wins=0,losses=0,pend=0,netTot=0;
+  let lastSrc=null;
+  // Track subtotals per group
+  let grpGross=0, grpNet=0, grpW=0, grpL=0;
+
+  const labels = {
+    'TMRW':'📡 TOMORROW PENDING',
+    'T-T': '🔁 TODAY SIGNALS (T-T)',
+    'Y-T': '✓ TODAY SETTLED (Y-T)',
+    'YDAY':'YESTERDAY SETTLED'
+  };
+
+  let rows = '';
+  for (let i=0; i<sorted.length; i++) {
+    const t = sorted[i];
     const outcome = t.outcome;
-    let rowStyle = 'border-bottom:1px solid rgba(255,255,255,0.04);';
-    let outcomeCol = 'var(--muted)';
-    const grossStr = outcome === 'PENDING' ? '—' : (t.gross > 0 ? '$'+t.gross.toFixed(2) : '$0.00');
-    let netStr = '—', netCol = 'var(--muted)';
+
+    // Subtotal row when group changes (and group had settled trades)
+    if (t.src !== lastSrc) {
+      if (lastSrc !== null && (grpW+grpL) > 0) {
+        const grpWR = Math.round(grpW/(grpW+grpL)*100);
+        const grpNetCol = grpNet>=0?'var(--green)':'var(--red)';
+        const grpGrossStr = grpGross>0?'$'+grpGross.toFixed(2):'$0';
+        const grpNetStr = (grpNet>=0?'+$':'-$')+Math.abs(grpNet).toFixed(2);
+        rows += `<tr class="subtotal-row">
+          <td colspan="3" style="padding:3px 4px;color:var(--muted);text-align:right;font-size:8px;letter-spacing:1px;">SUBTOTAL ${grpW}W/${grpL}L (${grpWR}%)</td>
+          <td style="padding:3px 4px;text-align:right;color:var(--muted2);">${grpGrossStr}</td>
+          <td style="padding:3px 4px;text-align:right;color:${grpNetCol};">${grpNetStr}</td>
+        </tr>`;
+      }
+      rows += `<tr><td colspan="5" style="padding:8px 4px 3px;font-size:7px;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">${labels[t.src]||t.src}</td></tr>`;
+      lastSrc = t.src;
+      grpGross=0; grpNet=0; grpW=0; grpL=0;
+    }
+
+    let outcomeCol='var(--muted)', grossStr='—', netStr='—', netCol='var(--muted)';
     if (outcome === 'WIN') {
-      wins++; netTot += t.net;
-      netStr = '+$'+t.net.toFixed(2); netCol = 'var(--green)'; outcomeCol = 'var(--green)';
+      wins++; netTot+=t.net; grpW++; grpNet+=t.net; grpGross+=(t.gross||0);
+      netStr = '+$'+t.net.toFixed(2); netCol='var(--green)'; outcomeCol='var(--green)';
+      grossStr = t.gross>0?'$'+t.gross.toFixed(2):'$0.00';
     } else if (outcome === 'LOSS') {
-      losses++; netTot += t.net;
-      netStr = '-$'+Math.abs(t.net).toFixed(2); netCol = 'var(--red)'; outcomeCol = 'var(--red)';
+      losses++; netTot+=t.net; grpL++; grpNet+=t.net;
+      netStr = '-$'+Math.abs(t.net).toFixed(2); netCol='var(--red)'; outcomeCol='var(--red)';
+      grossStr = '$0.00';
     } else {
       pend++;
     }
-    // Group header divider
-    let divider = '';
-    if (t.src !== lastSrc) {
-      const labels = {'TMRW':'TOMORROW PENDING','T-T':'TODAY SIGNALS','Y-T':'TODAY SETTLED','YDAY':'YESTERDAY SETTLED'};
-      divider = `<tr><td colspan="5" style="padding:8px 4px 3px;font-size:7px;letter-spacing:1.5px;color:var(--muted);border-bottom:1px solid var(--border);">${labels[t.src]||t.src}</td></tr>`;
-      lastSrc = t.src;
-    }
-    // Actual high for settled
-    const actualStr = (t.intraday_high != null && outcome !== 'PENDING')
+
+    const actualStr = (t.intraday_high!=null && outcome!=='PENDING')
       ? ' <span style="color:var(--yellow);font-size:8px;">' + t.intraday_high + '°</span>' : '';
-    return divider + `<tr style="${rowStyle}">
+    const typeColor = t.src==='T-T'?'var(--green)':t.src==='Y-T'?'var(--amber)':t.src==='TMRW'?'var(--blue)':'var(--muted2)';
+
+    rows += `<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
       <td style="padding:3px 4px;color:${outcomeCol};">${t.city}</td>
-      <td style="padding:3px 4px;text-align:center;color:var(--muted2);font-size:8px;">${t.src}</td>
+      <td style="padding:3px 4px;text-align:center;color:${typeColor};font-size:8px;">${t.src}</td>
       <td style="padding:3px 4px;color:var(--muted2);font-size:8px;">${t.bracket}${actualStr}</td>
       <td style="padding:3px 4px;text-align:right;color:var(--muted);">${grossStr}</td>
       <td style="padding:3px 4px;text-align:right;color:${netCol};">${netStr}</td>
     </tr>`;
-  });
+  }
+  // Final group subtotal
+  if (lastSrc !== null && (grpW+grpL) > 0) {
+    const grpWR = Math.round(grpW/(grpW+grpL)*100);
+    const grpNetCol = grpNet>=0?'var(--green)':'var(--red)';
+    rows += `<tr class="subtotal-row">
+      <td colspan="3" style="padding:3px 4px;color:var(--muted);text-align:right;font-size:8px;letter-spacing:1px;">SUBTOTAL ${grpW}W/${grpL}L (${grpWR}%)</td>
+      <td style="padding:3px 4px;text-align:right;color:var(--muted2);">${grpGross>0?'$'+grpGross.toFixed(2):'$0'}</td>
+      <td style="padding:3px 4px;text-align:right;color:${grpNetCol};">${(grpNet>=0?'+$':'-$')+Math.abs(grpNet).toFixed(2)}</td>
+    </tr>`;
+  }
 
-  tbody.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:12px;">No transactions for selected zone</td></tr>';
+  tbody.innerHTML = rows || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:12px;">No transactions</td></tr>';
 
-  // Summary bar
-  const totTot = wins + losses;
-  const wr = totTot > 0 ? Math.round(wins/totTot*100) + '%' : '—';
-  const netStr = netTot > 0 ? '+$'+netTot.toFixed(2) : netTot < 0 ? '-$'+Math.abs(netTot).toFixed(2) : '$0.00';
-  const netCol = netTot > 0 ? 'var(--green)' : netTot < 0 ? 'var(--red)' : 'var(--muted)';
-  document.getElementById('s4-stats').innerHTML =
-    `<span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);">${wins}W / ${losses}L / ${pend}P · WR: <span style="color:${parseInt(wr)>=50?'var(--green)':'var(--red)'}">${wr}</span> · Net: <span style="color:${netCol}">${netStr}</span></span>`;
-
+  const totTot = wins+losses;
+  const wr     = totTot>0 ? Math.round(wins/totTot*100)+'%' : '—';
+  const netStr = netTot>0?'+$'+netTot.toFixed(2):netTot<0?'-$'+Math.abs(netTot).toFixed(2):'$0.00';
+  const netCol = netTot>0?'var(--green)':netTot<0?'var(--red)':'var(--muted)';
+  statsEl.innerHTML = `<span style="font-family:'Courier New',monospace;font-size:9px;color:var(--muted);">${wins}W / ${losses}L / ${pend}P · WR: <span style="color:${parseInt(wr)>=50?'var(--green)':'var(--red)'}">${wr}</span> · Net: <span style="color:${netCol}">${netStr}</span></span>`;
   document.getElementById('s4-summary').textContent = wr + ' · ' + netStr;
+}
+
+// ── PIN gate ───────────────────────────────────────────────────────────────
+const PIN_HASH = 'wh62';
+function hashPin(pin) {
+  let h=0;
+  for (let i=0;i<pin.length;i++) { h=Math.imul(31,h)+pin.charCodeAt(i)|0; }
+  return Math.abs(h).toString(36);
+}
+function checkPin() {
+  const val = document.getElementById('pin-input').value;
+  if (hashPin(val) === PIN_HASH) {
+    document.getElementById('gate').style.display = 'none';
+    localStorage.setItem('kalshi_auth', PIN_HASH);
+    renderAll();
+  } else {
+    const err = document.getElementById('pin-err');
+    err.textContent = 'Incorrect PIN';
+    document.getElementById('pin-input').value = '';
+    setTimeout(() => err.textContent = '', 2000);
+  }
+}
+document.getElementById('pin-input').addEventListener('keydown', e => { if (e.key==='Enter') checkPin(); });
+if (localStorage.getItem('kalshi_auth') === PIN_HASH) {
+  document.getElementById('gate').style.display = 'none';
 }
 </script>
 </body>
