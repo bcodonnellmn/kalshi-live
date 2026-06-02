@@ -334,7 +334,7 @@
 
 <script>
 // ── Baked-in data ──────────────────────────────────────────────────────────
-const PEAKS        = [{"city": "Houston", "bracket": "91\u00b0 to 92\u00b0", "adj": "93\u00b0 to 94\u00b0", "price": 40, "adj_price": 9, "edge": 12, "zone": "OPEN", "target": "2026-06-02", "fired_str": "06-02 5:43am", "spent": 99.95, "win_primary": 25.05, "win_adjacent": 455.05, "age_min": 407, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "today", "outcome": "PENDING", "top_mkt": "88\u00b0 or below", "top_mkt_pct": 4, "intraday_high": 87.1, "tx_group": 1}, {"city": "Atlanta", "bracket": "79\u00b0 to 80\u00b0", "adj": "77\u00b0 to 78\u00b0", "price": 26, "adj_price": 7, "edge": 20, "zone": "MIDDAY", "target": "2026-06-02", "fired_str": "06-01 2:56pm", "spent": 99.9, "win_primary": 92.1, "win_adjacent": 614.1, "age_min": 1294, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 84, "tx_group": 3}, {"city": "Austin", "bracket": "92\u00b0 to 93\u00b0", "adj": "94\u00b0 to 95\u00b0", "price": 24, "adj_price": 18, "edge": 11, "zone": "OPEN", "target": "2026-06-02", "fired_str": "06-01 11:56am", "spent": 99.78, "win_primary": 108.22, "win_adjacent": 177.22, "age_min": 1475, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 91.9, "tx_group": 3}, {"city": "Houston", "bracket": "91\u00b0 to 92\u00b0", "adj": "93\u00b0 to 94\u00b0", "price": 32, "adj_price": 9, "edge": 12, "zone": "MIDDAY", "target": "2026-06-02", "fired_str": "06-01 12:56pm", "spent": 99.87, "win_primary": 56.13, "win_adjacent": 455.13, "age_min": 1415, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 91, "tx_group": 3}, {"city": "Miami", "bracket": "90\u00b0 to 91\u00b0", "adj": "88\u00b0 to 89\u00b0", "price": 27, "adj_price": 6, "edge": 20, "zone": "EVENING", "target": "2026-06-02", "fired_str": "06-01 4:27pm", "spent": 99.93, "win_primary": 85.07, "win_adjacent": 733.07, "age_min": 1204, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 91.9, "tx_group": 3}, {"city": "Seattle", "bracket": "83\u00b0 to 84\u00b0", "adj": "81\u00b0 to 82\u00b0", "price": 26, "adj_price": 14, "edge": 13, "zone": "MIDDAY", "target": "2026-06-02", "fired_str": "06-01 2:55pm", "spent": 99.9, "win_primary": 92.1, "win_adjacent": 257.1, "age_min": 1295, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 75.9, "tx_group": 3}];
+const PEAKS        = [{"city": "Houston", "bracket": "91\u00b0 to 92\u00b0", "adj": "93\u00b0 to 94\u00b0", "price": 40, "adj_price": 9, "edge": 12, "zone": "OPEN", "target": "2026-06-02", "fired_str": "06-02 5:43am", "spent": 99.95, "win_primary": 25.05, "win_adjacent": 455.05, "age_min": 410, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "today", "outcome": "PENDING", "top_mkt": "88\u00b0 or below", "top_mkt_pct": 4, "intraday_high": 87.1, "tx_group": 1}, {"city": "Atlanta", "bracket": "79\u00b0 to 80\u00b0", "adj": "77\u00b0 to 78\u00b0", "price": 26, "adj_price": 7, "edge": 20, "zone": "MIDDAY", "target": "2026-06-02", "fired_str": "06-01 2:56pm", "spent": 99.9, "win_primary": 92.1, "win_adjacent": 614.1, "age_min": 1297, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 84, "tx_group": 3}, {"city": "Austin", "bracket": "92\u00b0 to 93\u00b0", "adj": "94\u00b0 to 95\u00b0", "price": 24, "adj_price": 18, "edge": 11, "zone": "OPEN", "target": "2026-06-02", "fired_str": "06-01 11:56am", "spent": 99.78, "win_primary": 108.22, "win_adjacent": 177.22, "age_min": 1477, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 91.9, "tx_group": 3}, {"city": "Houston", "bracket": "91\u00b0 to 92\u00b0", "adj": "93\u00b0 to 94\u00b0", "price": 32, "adj_price": 9, "edge": 12, "zone": "MIDDAY", "target": "2026-06-02", "fired_str": "06-01 12:56pm", "spent": 99.87, "win_primary": 56.13, "win_adjacent": 455.13, "age_min": 1417, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 91, "tx_group": 3}, {"city": "Miami", "bracket": "90\u00b0 to 91\u00b0", "adj": "88\u00b0 to 89\u00b0", "price": 27, "adj_price": 6, "edge": 20, "zone": "EVENING", "target": "2026-06-02", "fired_str": "06-01 4:27pm", "spent": 99.93, "win_primary": 85.07, "win_adjacent": 733.07, "age_min": 1206, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "LOSS", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 91.9, "tx_group": 3}, {"city": "Seattle", "bracket": "83\u00b0 to 84\u00b0", "adj": "81\u00b0 to 82\u00b0", "price": 26, "adj_price": 14, "edge": 13, "zone": "MIDDAY", "target": "2026-06-02", "fired_str": "06-01 2:55pm", "spent": 99.9, "win_primary": 92.1, "win_adjacent": 257.1, "age_min": 1298, "is_today": true, "is_tomorrow": false, "recently_fired": false, "tx_source": "tomorrow", "outcome": "PENDING", "top_mkt": null, "top_mkt_pct": null, "intraday_high": 75.9, "tx_group": 3}];
 const CB_DATA      = {"Houston": {"2026-06-02": {"zone": "OPEN", "outcome": "PENDING", "bracket": "91\u00b0 to 92\u00b0"}}, "Miami": {"2026-06-02": {"zone": "EVENING", "outcome": "LOSS", "bracket": "90\u00b0 to 91\u00b0"}}, "Austin": {"2026-06-02": {"zone": "OPEN", "outcome": "PENDING", "bracket": "92\u00b0 to 93\u00b0"}}, "Seattle": {"2026-06-02": {"zone": "MIDDAY", "outcome": "PENDING", "bracket": "83\u00b0 to 84\u00b0"}, "2026-06-01": {"zone": "EVENING", "outcome": "LOSS", "bracket": "73\u00b0 to 74\u00b0"}}, "Atlanta": {"2026-06-02": {"zone": "MIDDAY", "outcome": "LOSS", "bracket": "79\u00b0 to 80\u00b0"}}, "Los Angeles": {"2026-06-01": {"zone": "EVENING", "outcome": "LOSS", "bracket": "70\u00b0 to 71\u00b0"}}, "Philadelphia": {"2026-06-01": {"zone": "OPEN", "outcome": "LOSS", "bracket": "77\u00b0 to 78\u00b0"}}, "Minneapolis": {"2026-06-01": {"zone": "MIDDAY", "outcome": "WIN", "bracket": "80\u00b0 to 81\u00b0"}}};
 const CB_CITIES    = ["Atlanta", "Austin", "Houston", "Los Angeles", "Miami", "Minneapolis", "Philadelphia", "Seattle"];
 const CB_DATES     = ["2026-06-03", "2026-06-02", "2026-06-01"];
@@ -519,9 +519,10 @@ function renderCBToday() {
   let rows = '';
 
   allCities.forEach(city => {
-    // In GATE mode: show city row only if it has at least one gate-qualifying cell.
-    // Individual cells that don't qualify render as empty dots (handled in makeTTCell).
+    // P&L gate: skip city if it fails
     if (cbZone === 'gate' && !isCityGate(city)) return;
+    // Signal-level gate: in GATE mode, skip row if no T-T cell passes isCityGate
+    // (T-T cells only use city P&L gate, so this is already covered above)
 
     // Use a local counter copy so makeCBCell counts correctly
     const makeTTCell = (col, dataObj) => {
@@ -575,12 +576,24 @@ function renderCBTmrw() {
   cities.forEach(city => {
     const hasCells = cols.some(col => !!(CB4[col] || {})[city]);
     if (!hasCells) return;
-    // In GATE mode: show city row only if the city passes the P&L gate.
-    // Individual cells that don't pass signal-level gate render as empty dots (makeCBCell).
+    // P&L gate: skip city if it fails
     if (cbZone === 'gate' && !isCityGate(city)) return;
-    // Further: only show row if at least one cell has actual signal data
-    const hasAnyCell = cols.some(col => !!(CB4[col] || {})[city]);
-    if (!hasAnyCell) return;
+    // Signal-level gate: in GATE mode, skip row if no cell passes isGatePass.
+    // Prevents cities like Philadelphia (positive P&L but OPEN-zone signal) from
+    // showing a row of empty dots when every cell would be hidden.
+    if (cbZone === 'gate') {
+      const anyPassesSignalGate = cols.some(col => {
+        const d = (CB4[col] || {})[city];
+        if (!d) return false;
+        return isGatePass({
+          src: 'Y-T', city,
+          price: d.price || 0, edge: d.edge || 0,
+          fired_hour: d.fired_hour != null ? d.fired_hour : null,
+          obs_gap_f: d.obs_gap_f !== undefined ? d.obs_gap_f : null,
+        });
+      });
+      if (!anyPassesSignalGate) return;
+    }
     rows += '<tr><td class="city-name">' + city + '</td>' +
       cols.map(col => makeCBCell(col, city, counters)).join('') + '</tr>';
   });
